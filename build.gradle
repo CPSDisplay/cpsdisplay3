@@ -1,0 +1,71 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+    }
+}
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+group = "fr.dams4k.cpsdisplay"
+version = "mc1.8.9-${mod_version}"
+
+minecraft {
+    version = "1.8.9-11.15.1.1722"
+    runDir = "run"
+    
+    mappings = "stable_20"
+    // makeObfSourceJar = true // an Srg named sources jar is made by default
+}
+
+dependencies {}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ["src/main/java"]
+        }
+        resources {
+            srcDirs = ["src/main/resources"]
+        }
+    }
+}
+
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "mod_id", mod_id
+    inputs.property "mod_name", mod_name
+    inputs.property "mod_version", mod_version
+    inputs.property "mc_version", project.minecraft.version
+    inputs.property "mod_website", mod_website
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+                
+        // replace version and mcversion
+        expand "mod_version":mod_version, "mc_version":project.minecraft.version, "mod_id":mod_id, "mod_name":mod_name, "mod_website":mod_website
+    }
+        
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+            "TweakOrder": 0,
+            "TweakClass": "fr.dams4k.cpstweaker.CPSSetupTweaker"
+        )
+    }
+}
