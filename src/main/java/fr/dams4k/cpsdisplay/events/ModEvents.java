@@ -3,8 +3,6 @@ package fr.dams4k.cpsdisplay.events;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.dams4k.cpsdisplay.gui.CPSOverlay;
-import fr.dams4k.cpsdisplay.gui.GuiConfig;
 import fr.dams4k.cpsdisplay.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngameMenu;
@@ -13,6 +11,7 @@ import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.fml.client.config.GuiConfig;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
@@ -29,27 +28,25 @@ public class ModEvents {
     private final Minecraft mc = Minecraft.getMinecraft();
 	private GameSettings gs = mc.gameSettings;
 
-    private final CPSOverlay cpsOverlay = new CPSOverlay();
-
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onDrawnScreen(DrawScreenEvent.Post event) {
-        if (event.gui instanceof GuiConfig) {
-            cpsOverlay.renderOverlay(this.getAttackCPS(), this.getUseCPS());
-        }
+        // if (event.gui instanceof GuiConfig) {
+        //     cpsOverlay.renderOverlay(this.getAttackCPS(), this.getUseCPS());
+        // }
     }
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onRenderGui(RenderGameOverlayEvent.Post gameOverlayEvent) {
         // .Post is important, without, hotbar (for example) isn't drawn when overlay's transparent background is over
 		if (gameOverlayEvent.type == ElementType.HOTBAR && !(mc.currentScreen instanceof GuiIngameMenu || mc.currentScreen instanceof GuiConfig)) {
-            cpsOverlay.renderOverlay(this.getAttackCPS(), this.getUseCPS());
+            // Draw overlay
 		}
 	}
 	
 	@SubscribeEvent
 	public void onNewTick(ClientTickEvent event) {
 		if (ClientProxy.CPS_OVERLAY_CONFIG.isKeyDown()) {
-			mc.displayGuiScreen(new GuiConfig());
+            // Display overlay
 		}
 	}
 

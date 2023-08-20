@@ -22,6 +22,12 @@ minecraft {
     version = "1.8.9-11.15.1.1722"
     runDir = "run"
     
+    replace "{mod_id}", mod_id
+    replace "{mod_name}", mod_name
+    replace "{mod_version}", mod_version
+    replace "{mod_releases_url}", mod_releases_url
+    replaceIn "References.java"
+    
     mappings = "stable_20"
     // makeObfSourceJar = true // an Srg named sources jar is made by default
 }
@@ -61,11 +67,12 @@ processResources {
     }
 }
 
-jar {
-    manifest {
-        attributes(
-            "TweakOrder": 0,
-            "TweakClass": "fr.dams4k.cpstweaker.CPSSetupTweaker"
-        )
-    }
-}
+//TODO: recreate CPSSetupTweaker
+// jar {
+//     manifest {
+//         attributes(
+//             "TweakOrder": 0,
+//             "TweakClass": "fr.dams4k.cpstweaker.CPSSetupTweaker"
+//         )
+//     }
+// }
