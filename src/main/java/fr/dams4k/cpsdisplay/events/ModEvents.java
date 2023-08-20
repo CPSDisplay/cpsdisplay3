@@ -3,6 +3,7 @@ package fr.dams4k.cpsdisplay.events;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.dams4k.cpsdisplay.component.ModComponent;
 import fr.dams4k.cpsdisplay.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngameMenu;
@@ -19,6 +20,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 
 
 public class ModEvents {
+    public final ClientProxy proxy;
+
     private boolean attackIsPressed = false;
     private boolean useIsPressed = false;
 
@@ -28,6 +31,10 @@ public class ModEvents {
     private final Minecraft mc = Minecraft.getMinecraft();
 	private GameSettings gs = mc.gameSettings;
 
+    public ModEvents(ClientProxy proxy) {
+        this.proxy = proxy;
+    }
+
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onDrawnScreen(DrawScreenEvent.Post event) {
         // if (event.gui instanceof GuiConfig) {
@@ -36,10 +43,12 @@ public class ModEvents {
     }
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public void onRenderGui(RenderGameOverlayEvent.Post gameOverlayEvent) {
-        // .Post is important, without, hotbar (for example) isn't drawn when overlay's transparent background is over
+	public void onRenderGui(RenderGameOverlayEvent.Post gameOverlayEvent) { // .Post is important, without, hotbar (for example) isn't drawn when overlay's transparent background is over
 		if (gameOverlayEvent.type == ElementType.HOTBAR && !(mc.currentScreen instanceof GuiIngameMenu || mc.currentScreen instanceof GuiConfig)) {
-            // Draw overlay
+            // Draw components
+            for (ModComponent component : proxy.components) {
+                component.draw();
+            }
 		}
 	}
 	
