@@ -59,15 +59,26 @@ public class ClientProxy extends CommonProxy {
 			Launch.minecraftHome = new File(".");
 		}
 		
-		return Launch.minecraftHome.toPath().resolve("config").resolve(References.MOD_ID);
+		Path path = Launch.minecraftHome.toPath().resolve("config").resolve(References.MOD_ID);
+		
+		// Create folders if needed
+		if (!path.toFile().exists()) {
+			try {
+				Files.createDirectories(path);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return path;
 	}
 
 	public static Path getComponentsFolder() {
-		Path componentsFolderPath = ClientProxy.getConfigFolder().resolve("components");
+		Path path = ClientProxy.getConfigFolder().resolve("components");
 		
-		if (!componentsFolderPath.toFile().exists()) {
+		if (!path.toFile().exists()) {
 			try {
-				Files.createDirectories(componentsFolderPath);
+				Files.createDirectories(path);
+				// First launch of the mod, we create the first component
 				ModComponent component = new ModComponent("0.cps");
 				component.forceSave();
 			} catch (IOException e) {
@@ -75,6 +86,6 @@ public class ClientProxy extends CommonProxy {
 			}
 		}
 
-		return componentsFolderPath;
+		return path;
 	}
 }
