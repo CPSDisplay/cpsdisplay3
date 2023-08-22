@@ -85,7 +85,6 @@ public class ClientProxy extends CommonProxy {
 				e.printStackTrace();
 			}
 		}
-
 		return path;
 	}
 }
