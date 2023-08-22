@@ -21,7 +21,7 @@ public class ModScreen extends GuiScreen {
 		buttonList.clear();
 		labelList.clear();
 
-        String title = String.format("%s - v%s", References.MOD_NAME, References.MOD_VERSION);
+        String title = String.format("%s - %s", References.MOD_NAME, References.MOD_VERSION);
         GuiLabel titleLabel = new GuiLabel(mc.fontRendererObj, -1, width/2-mc.fontRendererObj.getStringWidth(title)/2, top-10, 150, 20, 0xffffff);
         titleLabel.func_175202_a(title);
         labelList.add(titleLabel);
