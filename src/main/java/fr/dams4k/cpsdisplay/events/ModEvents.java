@@ -6,6 +6,7 @@ import java.util.List;
 import fr.dams4k.cpsdisplay.CPSDisplay;
 import fr.dams4k.cpsdisplay.gui.Component;
 import fr.dams4k.cpsdisplay.gui.ConfigScreen;
+import fr.dams4k.cpsdisplay.gui.DebugScreen;
 import fr.dams4k.cpsdisplay.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.GameSettings;
@@ -50,7 +51,7 @@ public class ModEvents {
 	public void onNewTick(ClientTickEvent event) {
 		if (ClientProxy.CPS_OVERLAY_CONFIG.isKeyDown()) {
             // Display config
-            mc.displayGuiScreen(new ConfigScreen());
+            mc.displayGuiScreen(new DebugScreen());
 		}
 	}
 
