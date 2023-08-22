@@ -17,8 +17,10 @@ public class ModComponent {
     private final Configuration config;
 
     private Property pText;
+    private Property pPosition;
 
     private String text = "[0 | 0] CPS";
+    private int[] position = {0, 0};
 
     public ModComponent(String filename) {
         this.filename = filename;
@@ -34,12 +36,15 @@ public class ModComponent {
 
     public void load() {
         pText = config.get("appearance", "text", text);
+        pPosition = config.get("appearance", "position", position);
 
         text = pText.getString();
+        position = pPosition.getIntList();
     }
 
     public void save() {
         pText.set(text);
+        pPosition.set(position);
 
         if (config.hasChanged()) {
             config.save();
@@ -47,11 +52,10 @@ public class ModComponent {
     }
 
     public void forceSave() {
-        System.out.println("FORCE SAVE");
         config.save();
     }
 
     public void draw() {
-        mc.fontRendererObj.drawString(text, 0, 0, 0xffffff);
+        mc.fontRendererObj.drawString(text, position[0], position[1], 0xffffff);
     }
 }

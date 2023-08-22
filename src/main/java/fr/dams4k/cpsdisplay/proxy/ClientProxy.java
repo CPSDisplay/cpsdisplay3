@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -50,7 +49,7 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void init() {
 		ClientRegistry.registerKeyBinding(CPS_OVERLAY_CONFIG);
-		MinecraftForge.EVENT_BUS.register(new ModEvents(this));
+		MinecraftForge.EVENT_BUS.register(new ModEvents());
 		ClientCommandHandler.instance.registerCommand(new ConfigCommand());
 	}
 
