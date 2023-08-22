@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.dams4k.cpsdisplay.CPSDisplay;
-import fr.dams4k.cpsdisplay.component.ModComponent;
-import fr.dams4k.cpsdisplay.gui.ModConfigGui;
+import fr.dams4k.cpsdisplay.gui.Component;
+import fr.dams4k.cpsdisplay.gui.ConfigScreen;
 import fr.dams4k.cpsdisplay.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.GameSettings;
@@ -38,9 +38,9 @@ public class ModEvents {
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onRenderGui(RenderGameOverlayEvent.Post gameOverlayEvent) { // .Post is important, without, hotbar (for example) isn't drawn when overlay's transparent background is over
-		if (gameOverlayEvent.type == ElementType.HOTBAR && !(mc.currentScreen instanceof ModConfigGui)) {
+		if (gameOverlayEvent.type == ElementType.HOTBAR && !(mc.currentScreen instanceof ConfigScreen)) {
             // Draw components
-            for (ModComponent component : CPSDisplay.proxy.components) {
+            for (Component component : CPSDisplay.proxy.components) {
                 component.draw();
             }
 		}
@@ -50,7 +50,7 @@ public class ModEvents {
 	public void onNewTick(ClientTickEvent event) {
 		if (ClientProxy.CPS_OVERLAY_CONFIG.isKeyDown()) {
             // Display config
-            mc.displayGuiScreen(new ModConfigGui());
+            mc.displayGuiScreen(new ConfigScreen());
 		}
 	}
 

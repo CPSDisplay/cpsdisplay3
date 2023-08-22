@@ -1,4 +1,4 @@
-package fr.dams4k.cpsdisplay.component;
+package fr.dams4k.cpsdisplay.gui;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -8,8 +8,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
-public class ModComponent {
-    private final Minecraft mc = Minecraft.getMinecraft();
+public class Component {
+    protected final Minecraft mc = Minecraft.getMinecraft();
 
     private String filename;
 
@@ -22,7 +22,7 @@ public class ModComponent {
     private String text = "[0 | 0] CPS";
     private int[] position = {0, 0};
 
-    public ModComponent(String filename) {
+    public Component(String filename) {
         this.filename = filename;
 
         Path configPath = ClientProxy.getComponentsFolder().resolve(this.filename);
@@ -55,7 +55,38 @@ public class ModComponent {
         config.save();
     }
 
+    // Only when ConfigScreen is open
+    public boolean clicked(int mouseX, int mouseY) {
+        int width = this.mc.fontRendererObj.getStringWidth(this.text);
+        int height = this.mc.fontRendererObj.FONT_HEIGHT;
+
+        return position[0] < mouseX && mouseX < position[0] + width && position[1] < mouseY && mouseY < position[1] + height;
+    }
+    
     public void draw() {
         mc.fontRendererObj.drawString(text, position[0], position[1], 0xffffff);
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+        save();
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setPosition(int[] position) {
+        this.position = position;
+        // TODO: add a "auto save" parameter to not spam saving the config when moving
+        save();
+    }
+
+    public int[] getPosition() {
+        return position;
     }
 }

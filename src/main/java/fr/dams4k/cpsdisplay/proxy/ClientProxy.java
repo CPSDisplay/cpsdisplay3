@@ -14,8 +14,8 @@ import org.lwjgl.input.Keyboard;
 
 import fr.dams4k.cpsdisplay.References;
 import fr.dams4k.cpsdisplay.commands.ConfigCommand;
-import fr.dams4k.cpsdisplay.component.ModComponent;
 import fr.dams4k.cpsdisplay.events.ModEvents;
+import fr.dams4k.cpsdisplay.gui.Component;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -25,14 +25,14 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 public class ClientProxy extends CommonProxy {
 	public static final KeyBinding CPS_OVERLAY_CONFIG = new KeyBinding("cpsdisplay.key.opengui", Keyboard.KEY_P, "cpsdisplay.category.cpsdisplay");
 	
-	public final List<ModComponent> components = new ArrayList<>();
+	public final List<Component> components = new ArrayList<>();
 
 	@Override
 	public void preInit() {
 		Path componentsFolder = ClientProxy.getComponentsFolder();
 		File[] files = componentsFolder.toFile().listFiles();
 		
-		// No files -> no components
+		// No files <=> no components
 		if (files == null) return;
 
 		Set<String> componentFiles = Stream.of(componentsFolder.toFile().listFiles())
@@ -42,7 +42,7 @@ public class ClientProxy extends CommonProxy {
 
 		// Load all components
 		for (String filename : componentFiles) {
-			components.add(new ModComponent(filename));
+			components.add(new Component(filename));
 		}
 	}
 
@@ -78,7 +78,7 @@ public class ClientProxy extends CommonProxy {
 			try {
 				Files.createDirectories(path);
 				// First launch of the mod, we create the first component
-				ModComponent component = new ModComponent("0.cps");
+				Component component = new Component("0.cps");
 				component.forceSave();
 			} catch (IOException e) {
 				e.printStackTrace();

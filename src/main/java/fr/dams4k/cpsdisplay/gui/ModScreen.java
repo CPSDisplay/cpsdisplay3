@@ -1,5 +1,6 @@
 package fr.dams4k.cpsdisplay.gui;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,4 +34,28 @@ public class ModScreen extends GuiScreen {
 		}
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
+
+    @Override
+	protected void keyTyped(char typedChar, int keyCode) throws IOException {
+		for (GuiTextField field : this.textFieldList) {
+			field.textboxKeyTyped(typedChar, keyCode);
+		}
+		super.keyTyped(typedChar, keyCode);
+	}
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        for (GuiTextField field : this.textFieldList) {
+			field.mouseClicked(mouseX, mouseY, mouseButton);
+		}
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+    }
+
+    @Override
+	public void updateScreen() {
+		for (GuiTextField field : this.textFieldList) {
+			field.updateCursorCounter();
+		}
+		super.updateScreen();
+	}
 }

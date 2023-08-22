@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import fr.dams4k.cpsdisplay.References;
-import fr.dams4k.cpsdisplay.gui.ModConfigGui;
+import fr.dams4k.cpsdisplay.gui.ConfigScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -42,7 +42,7 @@ public class ConfigCommand extends CommandBase {
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
         // we need to wait a tick lol
-        Minecraft.getMinecraft().displayGuiScreen(new ModConfigGui());
+        Minecraft.getMinecraft().displayGuiScreen(new ConfigScreen());
         MinecraftForge.EVENT_BUS.unregister(this);
     }
 }
