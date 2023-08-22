@@ -54,7 +54,7 @@ public class ConfigScreen extends ModScreen {
         boolean mouseHasMoved = selectPosition.equals(new int[]{mouseX, mouseY});
 
         if (componentSelected != null && !openTimeExpired && !mouseHasMoved) {
-            // mc.displayGuiScreen(new ComponentConfigScreen(componentSelected));
+            mc.displayGuiScreen(new ComponentConfigScreen(componentSelected));
         }
         
         componentSelected = null;
