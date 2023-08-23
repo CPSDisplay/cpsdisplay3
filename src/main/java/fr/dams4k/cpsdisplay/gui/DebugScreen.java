@@ -8,7 +8,6 @@ public class DebugScreen extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-
         int c = 0x45ff0000;
         int margin = 1;
 
@@ -28,10 +27,9 @@ public class DebugScreen extends GuiScreen {
 
         
         // Hotbar
-        this.drawHorizontalLine(middle-91-margin,       middle + 91 + margin-1,                   scaledresolution.getScaledHeight()+margin-1, c);
-        this.drawHorizontalLine(middle-91-margin,       middle + 91 + margin-1,                   scaledresolution.getScaledHeight()-22-margin, c);
-        this.drawVerticalLine(middle-91-margin,         scaledresolution.getScaledHeight()+margin,  scaledresolution.getScaledHeight()-22-margin-1, c);
-        this.drawVerticalLine(middle+91+margin-1,       scaledresolution.getScaledHeight()+margin,  scaledresolution.getScaledHeight()-22-margin-1, c);
+        this.drawHorizontalLine(0, width, scaledresolution.getScaledHeight()-22, c);
+        this.drawVerticalLine(middle-91,         scaledresolution.getScaledHeight(),  scaledresolution.getScaledHeight()-22-1, c);
+        this.drawVerticalLine(middle+91-1,       scaledresolution.getScaledHeight(),  scaledresolution.getScaledHeight()-22-1, c);
 
 
         // Scoreboard
@@ -60,8 +58,12 @@ public class DebugScreen extends GuiScreen {
         this.drawVerticalLine(width/2-7-margin, height/2-7-margin, height/2+7+margin, c);
         this.drawVerticalLine(width/2+7+margin, height/2-7-margin, height/2+7+margin, c);
 
-        // System.out.println(width); // get bigger when changing scale
+        // Quads
+        this.drawHorizontalLine(0, width, height/4, c);
+        this.drawVerticalLine(width/4, 0, height-32+3, c);
+        this.drawVerticalLine(3*width/4, 0, height-32+3, c);
 
-        // mc.ingameGUI.
+        this.drawHorizontalLine(0, width, height-32+3, c);
+        this.drawHorizontalLine(0, width, height-32+7, c);
     }
 }

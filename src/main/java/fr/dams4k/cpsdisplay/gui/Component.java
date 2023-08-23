@@ -5,6 +5,7 @@ import java.nio.file.Path;
 
 import fr.dams4k.cpsdisplay.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
@@ -64,7 +65,11 @@ public class Component {
     }
     
     public void draw() {
-        mc.fontRendererObj.drawString(text, position[0], position[1], 0xffffff);
+        int textHeight = mc.fontRendererObj.FONT_HEIGHT;
+        int textWidth = mc.fontRendererObj.getStringWidth(text);
+
+        // draw centered
+        mc.fontRendererObj.drawString(text, position[0] - textWidth/2, position[1] - textHeight/2, 0xffffff);
     }
 
     public String getFilename() {

@@ -16,7 +16,9 @@ public class MoveComponentScreen extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
         
         // Change position, no need to draw components, they are already drawn in ModEvents.java
-        int[] newPosition = new int[]{mouseX - offset[0], mouseY - offset[1]};
+        Position position = new Position(new int[]{mouseX, mouseY});
+
+        int[] newPosition = new int[]{mouseX-offset[0], mouseY-offset[1]};
         component.setPosition(newPosition);
     }
 
