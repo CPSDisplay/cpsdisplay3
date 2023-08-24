@@ -23,6 +23,8 @@ public class Component {
     private String text = "[0 | 0] CPS";
     private int[] position = {0, 0};
 
+    public Position pos = new Position(0, 0);
+
     public Component(String filename) {
         this.filename = filename;
 
@@ -61,7 +63,11 @@ public class Component {
         int width = this.mc.fontRendererObj.getStringWidth(this.text);
         int height = this.mc.fontRendererObj.FONT_HEIGHT;
 
-        return position[0] < mouseX && mouseX < position[0] + width && position[1] < mouseY && mouseY < position[1] + height;
+        int textHeight = mc.fontRendererObj.FONT_HEIGHT;
+        int textWidth = mc.fontRendererObj.getStringWidth(text);
+
+        int[] position = pos.getGlobalPosition();
+        return position[0] - textWidth/2 < mouseX && mouseX < position[0] - textWidth/2 + width && position[1] - textHeight/2 < mouseY && mouseY < position[1] - textHeight/2 + height;
     }
     
     public void draw() {
@@ -69,6 +75,7 @@ public class Component {
         int textWidth = mc.fontRendererObj.getStringWidth(text);
 
         // draw centered
+        int[] position = pos.getGlobalPosition();
         mc.fontRendererObj.drawString(text, position[0] - textWidth/2, position[1] - textHeight/2, 0xffffff);
     }
 

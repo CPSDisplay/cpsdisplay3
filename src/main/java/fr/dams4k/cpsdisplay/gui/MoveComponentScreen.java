@@ -15,11 +15,14 @@ public class MoveComponentScreen extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
         
-        // Change position, no need to draw components, they are already drawn in ModEvents.java
-        Position position = new Position(new int[]{mouseX, mouseY});
+        //TODO: use the mouse position for accurate snaping
 
-        int[] newPosition = new int[]{mouseX-offset[0], mouseY-offset[1]};
-        component.setPosition(newPosition);
+        // Change position, no need to draw components, they are already drawn in ModEvents.java
+        Position position = new Position(mouseX-offset[0], mouseY-offset[1]);
+        component.pos = position;
+
+        // int[] newPosition = new int[]{mouseX-offset[0], mouseY-offset[1]};
+        // component.setPosition(newPosition);
     }
 
     @Override

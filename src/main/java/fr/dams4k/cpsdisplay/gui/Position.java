@@ -22,6 +22,8 @@ public class Position {
     private Anchor anchor;
     private int[] position = new int[2];
 
+    private int snapStrength = 4;
+
     public Position(Quad quad, Anchor anchor, int[] position) {
         this.quad = quad;
         this.anchor = anchor;
@@ -29,17 +31,26 @@ public class Position {
     }
 
     public Position(int[] globalPosition) {
-        int x = globalPosition[0];
-        int y = globalPosition[1];
-        
+        this(globalPosition[0], globalPosition[1]);
+    }
+
+    public Position(int x, int y) {
+        position[0] = x;
+        position[1] = y;
+
         ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft());
         int gameWidth = scaledResolution.getScaledWidth();
         int gameHeight = scaledResolution.getScaledHeight();
 
         int hotBarWidth = 91;
         int hotBarHeight = 22;
+        int hotBarMiddlePosition = gameHeight - hotBarHeight/2;
+
         if (y > gameHeight - hotBarHeight) {
             // HotBar section
+            if (y > hotBarMiddlePosition-snapStrength && y < hotBarMiddlePosition+snapStrength) {
+                position[1] = hotBarMiddlePosition;
+            }
             System.out.println("In hotbar section");
         } else {
             System.out.println("Not in hotbar section");
@@ -47,11 +58,12 @@ public class Position {
     }
 
     public int[] getGlobalPosition() {
-        if (quad.equals(Quad.HOTBAR_LEFT_RIGHT)) {
-            // if (anchor.equals(Anchor.CENTER))
+        // if (quad.equals(Quad.HOTBAR_LEFT_RIGHT)) {
+        //     // if (anchor.equals(Anchor.CENTER))
 
-        }
+        // }
 
-        return new int[2];
+        // return new int[2];
+        return position;
     }
 }

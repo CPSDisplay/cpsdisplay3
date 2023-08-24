@@ -80,7 +80,7 @@ public class ConfigScreen extends ModScreen {
         for (Component component : CPSDisplay.proxy.components) {
             if (component.clicked(mouseX, mouseY)) {
                 componentClicked = true;
-
+                System.out.println("clicked");
                 componentSelected = component;
                 selectPosition = new int[]{mouseX, mouseY};
                 selectTimestamp = System.currentTimeMillis();
@@ -98,7 +98,10 @@ public class ConfigScreen extends ModScreen {
         super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
         
         if (componentSelected != null && selectPosition != new int[]{mouseX, mouseY}) {
-            int[] offset = new int[]{mouseX - componentSelected.getPosition()[0], mouseY - componentSelected.getPosition()[1]};
+            // int[] offset = new int[]{mouseX - componentSelected.getPosition()[0], mouseY - componentSelected.getPosition()[1]};
+            int[] componentPosition = componentSelected.pos.getGlobalPosition();
+            int[] offset = new int[]{mouseX - componentPosition[0], mouseY - componentPosition[1]};
+
             mc.displayGuiScreen(new MoveComponentScreen(componentSelected, offset));
         }
     }
