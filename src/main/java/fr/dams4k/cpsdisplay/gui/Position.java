@@ -47,10 +47,11 @@ public class Position {
     }
 
     public Position(int x, int y) {
+        ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft());
+
         position[0] = x;
         position[1] = y;
 
-        ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft());
         int gameWidth = scaledResolution.getScaledWidth();
         int gameHeight = scaledResolution.getScaledHeight();
 
@@ -61,7 +62,8 @@ public class Position {
         if (y > gameHeight - hotBarHeight) {
             // HotBar section
             if (y > hotBarMiddlePosition-snapStrength && y < hotBarMiddlePosition+snapStrength) {
-                position[1] = hotBarMiddlePosition;
+                // position[1] = hotBarMiddlePosition;
+                this.anchor = Anchor.V_CENTER;
             }
 
             // Check what quad
@@ -74,8 +76,10 @@ public class Position {
                 }
             } else if (x > (gameWidth+hotBarWidth)/2) {
                 // Right
-                if (x > (gameWidth+hotBarWidth)/2 + (gameWidth-(gameWidth+hotBarWidth)/2)/2) {
+                int startX = (gameWidth+hotBarWidth)/2 + (gameWidth-(gameWidth+hotBarWidth)/2)/2;
+                if (x > startX) {
                     this.quad = Quad.HOTBAR_RIGHT_RIGHT;
+                    this.position[0] = x - startX;
                 } else {
                     this.quad = Quad.HOTBAR_RIGHT_LEFT;
                 }
@@ -88,12 +92,25 @@ public class Position {
     }
 
     public int[] getGlobalPosition() {
-        // if (quad.equals(Quad.HOTBAR_LEFT_RIGHT)) {
-        //     // if (anchor.equals(Anchor.CENTER))
+        ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft());
+        int gameWidth = scaledResolution.getScaledWidth();
+        int gameHeight = scaledResolution.getScaledHeight();
 
-        // }
+        int hotBarWidth = 91*2;
+        int hotBarHeight = 22;
+        int hotBarMiddlePosition = gameHeight - hotBarHeight/2;
 
-        // return new int[2];
+        if (this.quad == Quad.HOTBAR_LEFT_LEFT) {
+            if (this.anchor == Anchor.V_CENTER) {
+                return new int[]{this.position[0], hotBarMiddlePosition};
+            }
+        } else if (this.quad == Quad.HOTBAR_RIGHT_RIGHT) {
+            if (this.anchor == Anchor.V_CENTER) {
+                int startX = (gameWidth+hotBarWidth)/2 + (gameWidth-(gameWidth+hotBarWidth)/2)/2;
+                return new int[]{startX + position[0], hotBarMiddlePosition};
+            }
+        }
+
         return position;
     }
 }
