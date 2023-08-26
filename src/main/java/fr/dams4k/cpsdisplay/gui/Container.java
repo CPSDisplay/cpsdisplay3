@@ -19,11 +19,15 @@ public class Container {
         return inXRange && inYRange;
     }
 
-    public float[] getComponentUVPosition(Component component) {
-        float x = (component.getX()-this.getX())/this.getWidth();
-        float y = (component.getY()-this.getY())/this.getHeight();
+    public float[] getComponentSnapsFloatPosition(Component component) {
+        int[] snaps = component.getSnaps();
         
-        return new float[]{x, y};
+        float cStartX = (snaps[0]-getX())/getWidth();
+        float cEndX = (snaps[2]-getX())/getWidth();
+        float cStartY = (snaps[1]-getY())/getHeight();
+        float cEndY = (snaps[3]-getY())/getHeight();
+        
+        return new float[]{cStartX, cStartY, cEndX, cEndY};
     }
 
     public int getX() {

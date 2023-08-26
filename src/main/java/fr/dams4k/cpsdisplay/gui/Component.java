@@ -104,7 +104,7 @@ public class Component {
         return mc.fontRendererObj.FONT_HEIGHT;
     }
 
-    public int[] getBounds() {
+    public int[] getSnaps() {
         return new int[]{getX()-getWidth()/2, getY()-getHeight()/2, getX()+getWidth()/2, getY()+getHeight()/2};
     }
 }
