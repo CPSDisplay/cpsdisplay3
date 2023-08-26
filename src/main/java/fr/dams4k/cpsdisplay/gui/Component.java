@@ -5,7 +5,6 @@ import java.nio.file.Path;
 
 import fr.dams4k.cpsdisplay.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
@@ -60,23 +59,14 @@ public class Component {
 
     // Only when ConfigScreen is open
     public boolean clicked(int mouseX, int mouseY) {
-        int width = this.mc.fontRendererObj.getStringWidth(this.text);
-        int height = this.mc.fontRendererObj.FONT_HEIGHT;
-
-        int textHeight = mc.fontRendererObj.FONT_HEIGHT;
-        int textWidth = mc.fontRendererObj.getStringWidth(text);
-
         int[] position = pos.getGlobalPosition();
-        return position[0] - textWidth/2 < mouseX && mouseX < position[0] - textWidth/2 + width && position[1] - textHeight/2 < mouseY && mouseY < position[1] - textHeight/2 + height;
+        return position[0] - getWidth()/2 < mouseX && mouseX < position[0] - getWidth()/2 + getWidth() && position[1] - getHeight()/2 < mouseY && mouseY < position[1] - getHeight()/2 + getHeight();
     }
     
     public void draw() {
-        int textHeight = mc.fontRendererObj.FONT_HEIGHT;
-        int textWidth = mc.fontRendererObj.getStringWidth(text);
-
         // draw centered
         int[] position = pos.getGlobalPosition();
-        mc.fontRendererObj.drawString(text, position[0] - textWidth/2, position[1] - textHeight/2, 0xffffff);
+        mc.fontRendererObj.drawString(text, position[0] - getWidth()/2, position[1] - getHeight()/2, 0xffffff);
     }
 
     public String getFilename() {
@@ -100,5 +90,13 @@ public class Component {
 
     public int[] getPosition() {
         return position;
+    }
+
+    public int getWidth() {
+        return mc.fontRendererObj.getStringWidth(text);
+    }
+
+    public int getHeight() {
+        return mc.fontRendererObj.FONT_HEIGHT;
     }
 }
