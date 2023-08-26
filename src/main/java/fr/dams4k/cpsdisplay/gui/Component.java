@@ -22,8 +22,6 @@ public class Component {
     private String text = "[0 | 0] CPS";
     private int[] position = {0, 0};
 
-    public Position pos = new Position(0, 0);
-
     public Component(String filename) {
         this.filename = filename;
 
@@ -59,13 +57,11 @@ public class Component {
 
     // Only when ConfigScreen is open
     public boolean clicked(int mouseX, int mouseY) {
-        int[] position = pos.getGlobalPosition();
-        return position[0] - getWidth()/2 < mouseX && mouseX < position[0] - getWidth()/2 + getWidth() && position[1] - getHeight()/2 < mouseY && mouseY < position[1] - getHeight()/2 + getHeight();
+        return position[0] - getWidth()/2 <= mouseX && mouseX < position[0] - getWidth()/2 + getWidth() && position[1] - getHeight()/2 <= mouseY && mouseY < position[1] - getHeight()/2 + getHeight();
     }
     
     public void draw() {
         // draw centered
-        int[] position = pos.getGlobalPosition();
         mc.fontRendererObj.drawString(text, position[0] - getWidth()/2, position[1] - getHeight()/2, 0xffffff);
     }
 
@@ -92,11 +88,23 @@ public class Component {
         return position;
     }
 
+    public int getX() {
+        return position[0];
+    }
+
+    public int getY() {
+        return position[1];
+    }
+
     public int getWidth() {
         return mc.fontRendererObj.getStringWidth(text);
     }
 
     public int getHeight() {
         return mc.fontRendererObj.FONT_HEIGHT;
+    }
+
+    public int[] getBounds() {
+        return new int[]{getX()-getWidth()/2, getY()-getHeight()/2, getX()+getWidth()/2, getY()+getHeight()/2};
     }
 }

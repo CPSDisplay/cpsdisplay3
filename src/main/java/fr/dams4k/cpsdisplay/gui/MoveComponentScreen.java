@@ -18,8 +18,15 @@ public class MoveComponentScreen extends GuiScreen {
         //TODO: use the mouse position for accurate snaping
 
         // Change position, no need to draw components, they are already drawn in ModEvents.java
-        Position position = new Position(mouseX-offset[0], mouseY-offset[1]);
-        component.pos = position;
+        // Position position = new Position(mouseX-offset[0], mouseY-offset[1]);
+        // component.pos = position;
+        component.setPosition(new int[]{mouseX-offset[0], mouseY-offset[1]});
+
+        int hotBarWidth = 91*2;
+        int hotBarHeight = 20;
+
+        Container inventoryLeftContainer = new Container(0, height-hotBarHeight, (width-hotBarWidth)/2, hotBarHeight);
+        System.out.println(inventoryLeftContainer.isInside(component));
 
         // int[] newPosition = new int[]{mouseX-offset[0], mouseY-offset[1]};
         // component.setPosition(newPosition);

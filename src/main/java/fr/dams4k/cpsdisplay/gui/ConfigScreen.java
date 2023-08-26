@@ -99,7 +99,7 @@ public class ConfigScreen extends ModScreen {
         
         if (componentSelected != null && selectPosition != new int[]{mouseX, mouseY}) {
             // int[] offset = new int[]{mouseX - componentSelected.getPosition()[0], mouseY - componentSelected.getPosition()[1]};
-            int[] componentPosition = componentSelected.pos.getGlobalPosition();
+            int[] componentPosition = componentSelected.getPosition();
             int[] offset = new int[]{mouseX - componentPosition[0], mouseY - componentPosition[1]};
 
             mc.displayGuiScreen(new MoveComponentScreen(componentSelected, offset));

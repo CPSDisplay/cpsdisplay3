@@ -87,7 +87,7 @@ public class Position {
                 this.quad = Quad.HOTBAR_MIDDLE;
             }
         } else {
-            System.out.println("Not in hotbar section");
+            // System.out.println("Not in hotbar section");
         }
     }
 
