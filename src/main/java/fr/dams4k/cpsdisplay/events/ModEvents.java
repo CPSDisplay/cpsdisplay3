@@ -1,100 +1,55 @@
 package fr.dams4k.cpsdisplay.events;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.lwjgl.glfw.GLFW;
 
-import fr.dams4k.cpsdisplay.CPSDisplay;
-import fr.dams4k.cpsdisplay.gui.Component;
-import fr.dams4k.cpsdisplay.gui.ConfigScreen;
-import fr.dams4k.cpsdisplay.gui.DebugScreen;
-import fr.dams4k.cpsdisplay.proxy.ClientProxy;
+import com.mojang.blaze3d.platform.InputConstants;
+
+import fr.dams4k.cpsdisplay.References;
+import fr.dams4k.cpsdisplay.gui.GuiComponent;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.settings.GameSettings;
-import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
-import net.minecraftforge.client.event.MouseEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
-
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.event.RenderGuiEvent;
+import net.minecraftforge.client.settings.KeyConflictContext;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 public class ModEvents {
-    private boolean attackIsPressed = false;
-    private boolean useIsPressed = false;
+    public static final Minecraft mc = Minecraft.getInstance();
 
-    private List<Long> attackClicks = new ArrayList<Long>();
-	private List<Long> useClicks = new ArrayList<Long>();
+    // Mod keys
+    public static final KeyMapping CPS_OVERLAY_CONFIG = new KeyMapping(
+        "cpsdisplay.key.opengui",
+        KeyConflictContext.IN_GAME,
+        InputConstants.Type.KEYSYM,
+        GLFW.GLFW_KEY_P,
+        "cpsdisplay.category.cpsdisplay");
 
-    private final Minecraft mc = Minecraft.getMinecraft();
-	private GameSettings gs = mc.gameSettings;
+    @Mod.EventBusSubscriber(modid = References.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
+    public static class ForgeEvents {
+        public static final GuiComponent overlay = new GuiComponent();
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onDrawnScreen(DrawScreenEvent.Post event) {
-        // if (event.gui instanceof ModConfigGui) {
-        //     cpsOverlay.renderOverlay(this.getAttackCPS(), this.getUseCPS());
-        // }
-    }
-
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public void onRenderGui(RenderGameOverlayEvent.Post gameOverlayEvent) { // .Post is important, without, hotbar (for example) isn't drawn when overlay's transparent background is over
-		if (gameOverlayEvent.type == ElementType.HOTBAR && !(mc.currentScreen instanceof ConfigScreen)) {
-            // Draw components
-            for (Component component : CPSDisplay.proxy.components) {
-                component.draw();
+        @SubscribeEvent
+        public static void onInput(InputEvent.Key event) {
+            if (CPS_OVERLAY_CONFIG.consumeClick()) {
+                System.out.println("click");
             }
-		}
-	}
-	
-	@SubscribeEvent
-	public void onNewTick(ClientTickEvent event) {
-		if (ClientProxy.CPS_OVERLAY_CONFIG.isKeyDown()) {
-            // Display config
-            mc.displayGuiScreen(new ConfigScreen());
-		}
-	}
-
-    @SubscribeEvent
-    public void onMouseEvent(MouseEvent e) {
-        this.onKeyPress();
-    }
-
-    @SubscribeEvent
-    public void onKeyboardEvent(KeyInputEvent e) {
-        this.onKeyPress();
-    }
-
-	public void onKeyPress() {
-        if (gs.keyBindAttack.isKeyDown()) {
-            if (!attackIsPressed) {
-                attackIsPressed = true;
-                attackClicks.add(System.currentTimeMillis());
-            }
-        } else {
-            attackIsPressed = false;
         }
-        
-        if (gs.keyBindUseItem.isKeyDown()) {
-            if (!useIsPressed) {
-                useIsPressed = true;
-                useClicks.add(System.currentTimeMillis());
-            }
-        } else {
-            useIsPressed = false;
+    }
+    
+    @Mod.EventBusSubscriber(modid = References.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static class ModBusEvents {
+        @SubscribeEvent
+        public static void onKeyRegister(RegisterKeyMappingsEvent event) {
+            event.register(CPS_OVERLAY_CONFIG);
         }
-	}
 
-	public int getAttackCPS() {
-		long currentTime = System.currentTimeMillis();
-		this.attackClicks.removeIf(e -> (e.longValue() + 1000l < currentTime));
-		return attackClicks.size();
-	}
-
-	public int getUseCPS() {
-		long currentTime = System.currentTimeMillis();
-		this.useClicks.removeIf(e -> (e.longValue() + 1000l < currentTime));
-		return useClicks.size();
-	}
+        @SubscribeEvent
+        public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
+            event.registerAboveAll("cpsdisplay", GuiComponent.OVERLAY);
+        }
+    }
 }
