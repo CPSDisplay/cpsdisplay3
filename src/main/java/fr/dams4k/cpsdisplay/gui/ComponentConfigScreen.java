@@ -34,7 +34,7 @@ public class ComponentConfigScreen extends ModScreen {
             int[] componentPosition = component.getPosition();
             int[] offset = new int[]{mouseX - componentPosition[0], mouseY - componentPosition[1]};
 
-            mc.displayGuiScreen(new MoveComponentScreen(component, offset));
+            mc.displayGuiScreen(new MoveComponentScreen(component, offset, true));
         }
 
         super.mouseClicked(mouseX, mouseY, mouseButton);

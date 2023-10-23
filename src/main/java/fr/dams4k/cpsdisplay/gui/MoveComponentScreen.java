@@ -5,10 +5,17 @@ import net.minecraft.client.gui.GuiScreen;
 public class MoveComponentScreen extends GuiScreen {
     private Component component;
     private int[] offset = new int[2];
+    private boolean openComponentConfig = false;
 
     public MoveComponentScreen(Component component, int[] offset) {
         this.component = component;
         this.offset = offset;
+    }
+
+    public MoveComponentScreen(Component component, int[] offset, boolean openComponentConfig) {
+        this.component = component;
+        this.offset = offset;
+        this.openComponentConfig = openComponentConfig;
     }
 
     @Override
@@ -35,6 +42,10 @@ public class MoveComponentScreen extends GuiScreen {
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int state) {
         super.mouseReleased(mouseX, mouseY, state);
-        mc.displayGuiScreen(new ConfigScreen());
+        if (this.openComponentConfig) {
+            mc.displayGuiScreen(new ComponentConfigScreen(component));
+        } else {
+            mc.displayGuiScreen(new ConfigScreen());
+        }
     }
 }
