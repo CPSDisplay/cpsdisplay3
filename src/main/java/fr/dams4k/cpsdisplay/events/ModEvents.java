@@ -35,7 +35,6 @@ public class ModEvents {
         @SubscribeEvent
         public static void onInput(InputEvent.Key event) {
             if (CPS_OVERLAY_CONFIG.consumeClick()) {
-                System.out.println("click");
                 mc.setScreen(new ConfigScreen());
             }
         }
