@@ -1,4 +1,6 @@
 {
-    "cpsdisplay.config.enabled": "Enabled",
-    "cpsdisplay.config.disabled": "Disabled"
+    "cpsdisplay.config.enabled": "§aEnabled",
+    "cpsdisplay.config.disabled": "§cDisabled",
+    "cpsdisplay.config.show_shadow": "Shadow",
+    "cpsdisplay.config.defaultText": "[{0} | {1}] CPS"
 }

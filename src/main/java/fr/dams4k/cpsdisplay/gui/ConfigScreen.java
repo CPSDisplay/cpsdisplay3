@@ -1,10 +1,7 @@
 package fr.dams4k.cpsdisplay.gui;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.components.CycleButton;
-import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.MultiLineEditBox;
 import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.client.gui.layouts.GridLayout;
@@ -20,6 +17,9 @@ public class ConfigScreen extends Screen {
     private static final Component ENABLED = Component.translatable("cpsdisplay.config.enabled");
     private static final Component DISABLED = Component.translatable("cpsdisplay.config.disabled");
 
+    private static final Component TEXT_DEFAULT = Component.translatable("cpsdisplay.config.defaultText");
+
+    private static final Component SHADOW = Component.translatable("cpsdisplay.config.show_shadow");
 
     public ConfigScreen() {
         super(SCREEN_TITLE);
@@ -27,28 +27,29 @@ public class ConfigScreen extends Screen {
 
     @Override
     protected void init() {
-        EditBox editBox = new EditBox(font, 120, 20, ENABLED);
-        Checkbox checkbox = new Checkbox(0, 0, 32, 32, ENABLED, true);
-
-        MultiLineEditBox multiLineEditBox = new MultiLineEditBox(font, 120, 120, 120, 120, ENABLED, ENABLED);
-
-        CycleButton cycleButton = CycleButton.onOffBuilder(true).create(0, 0, 120, 20, ENABLED);
-
-        CycleButton<Boolean> cycleButton2 = CycleButton.booleanBuilder(ENABLED, DISABLED).create(0, 0, 120, 20, null);
-        
         GridLayout gridlayout = new GridLayout();
         gridlayout.defaultCellSetting().paddingHorizontal(5).paddingBottom(4).alignHorizontallyCenter();
         GridLayout.RowHelper gridlayout$rowhelper = gridlayout.createRowHelper(2);
         
-        gridlayout$rowhelper.addChild(SpacerElement.height(26), 2);
-        gridlayout$rowhelper.addChild(Button.builder(ENABLED, (btn) -> {
+        
+        CycleButton<Boolean> enableModCycle = CycleButton.booleanBuilder(ENABLED, DISABLED)
+            .displayOnlyValue()
+            .create(0, 0, 250, 20, null);
+        
+        CycleButton<Boolean> shadowCycle = CycleButton.booleanBuilder(ENABLED, DISABLED).create(0, 0, 120, 20, SHADOW);
+        CycleButton<Boolean> shadowCycle2 = CycleButton.booleanBuilder(ENABLED, DISABLED).create(0, 0, 120, 20, SHADOW);
 
-        }).build());
+        MultiLineEditBox textEditBox = new MultiLineEditBox(
+            font, 0, 0, 250, 60,
+            TEXT_DEFAULT, title
+        );
 
-        // gridlayout$rowhelper.addChild(editBox);
+        gridlayout$rowhelper.addChild(enableModCycle, 2);
+        gridlayout$rowhelper.addChild(SpacerElement.height(2), 2);
+        gridlayout$rowhelper.addChild(shadowCycle);
+        gridlayout$rowhelper.addChild(shadowCycle2);
 
-        // gridlayout$rowhelper.addChild(checkbox);
-        gridlayout$rowhelper.addChild(cycleButton2);
+        gridlayout$rowhelper.addChild(textEditBox, 2);
         
         gridlayout.arrangeElements();
         FrameLayout.alignInRectangle(gridlayout, 0, this.height / 6 - 12, this.width, this.height, 0.5F, 0.0F);
