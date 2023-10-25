@@ -6,7 +6,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 
 import fr.dams4k.cpsdisplay.References;
 import fr.dams4k.cpsdisplay.gui.ConfigScreen;
-import fr.dams4k.cpsdisplay.gui.GuiComponent;
+import fr.dams4k.cpsdisplay.gui.DisplayComponent;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
@@ -30,7 +30,7 @@ public class ModEvents {
 
     @Mod.EventBusSubscriber(modid = References.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
     public static class ForgeEvents {
-        public static final GuiComponent overlay = new GuiComponent();
+        public static final DisplayComponent overlay = new DisplayComponent();
 
         @SubscribeEvent
         public static void onInput(InputEvent.Key event) {
@@ -49,7 +49,7 @@ public class ModEvents {
 
         @SubscribeEvent
         public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
-            event.registerAboveAll("cpsdisplay", GuiComponent.OVERLAY);
+            event.registerAboveAll("cpsdisplay", DisplayComponent.OVERLAY);
         }
     }
 }

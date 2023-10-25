@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.dams4k.cpsdisplay.References;
+import fr.dams4k.cpsdisplay.config.Config;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
@@ -13,7 +14,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = References.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class GuiComponent {
+public class DisplayComponent {
     private static final Minecraft mc = Minecraft.getInstance();
     // Minecraft keys
     private static final KeyMapping KEY_ATTACK = mc.options.keyAttack;
@@ -26,7 +27,18 @@ public class GuiComponent {
     private static List<Long> useClicks = new ArrayList<Long>();
 
     public static final IGuiOverlay OVERLAY = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
-        guiGraphics.drawCenteredString(mc.font, "[" + getAttackCPS() + " | " + getUseCPS() + "] CPS", 200, 200, 0xffffff);
+        String text = Config.TEXT.get();
+        text = text.replace("{0}", getAttackCPS().toString());
+        text = text.replace("{1}", getUseCPS().toString());
+        text = text.replace("&", "§");
+
+        String[] lines = text.split("\n");
+        int maxWidth = 0;
+
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+            guiGraphics.drawCenteredString(mc.font, line, mc.getWindow().getGuiScaledWidth()/2, 200 + i * mc.font.lineHeight, 0xffffff);
+        }
     };
 
     @SubscribeEvent
@@ -50,13 +62,13 @@ public class GuiComponent {
         }
     }
 
-    public static int getAttackCPS() {
+    public static Integer getAttackCPS() {
         long currentTime = System.currentTimeMillis();
         attackClicks.removeIf(e -> (e.longValue() + 1000l < currentTime));
         return attackClicks.size();
     }
 
-    public static int getUseCPS() {
+    public static Integer getUseCPS() {
         long currentTime = System.currentTimeMillis();
         useClicks.removeIf(e -> (e.longValue() + 1000l < currentTime));
         return useClicks.size();
