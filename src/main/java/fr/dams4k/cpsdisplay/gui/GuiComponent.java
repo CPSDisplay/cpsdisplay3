@@ -1,7 +1,6 @@
 package fr.dams4k.cpsdisplay.gui;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import fr.dams4k.cpsdisplay.References;
