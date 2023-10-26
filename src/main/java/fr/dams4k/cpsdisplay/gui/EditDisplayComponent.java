@@ -11,8 +11,8 @@ public class EditDisplayComponent extends DisplayComponent {
         int minX = Config.positionX - width/2;
         int maxX = Config.positionX + width/2;
 
-        int minY = Config.positionY - height/2;
-        int maxY = Config.positionY + height/2;
+        int minY = Config.positionY;
+        int maxY = Config.positionY + height;
 
         boolean correctX = x > minX && maxX > x;
         boolean correctY = y > minY && maxY > y;

@@ -12,8 +12,11 @@ public class Config {
     public static final ForgeConfigSpec SPEC;
     
     public static final ForgeConfigSpec.ConfigValue<String> TEXT;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> SHOW_TEXT;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> SHADOW;
+    public static final ForgeConfigSpec.BooleanValue SHOW_TEXT;
+    public static final ForgeConfigSpec.BooleanValue SHADOW;
+
+    public static final ForgeConfigSpec.IntValue POSITION_X;
+    public static final ForgeConfigSpec.IntValue POSITION_Y;
     
     public static boolean showText;
     public static String text;
@@ -22,6 +25,8 @@ public class Config {
     public static int positionX;
     public static int positionY;
 
+    public static boolean loaded = false; // TODO: Why did i need to have this fking variable? Change i change Config values, it automatically save and reload, that's annoying af
+
     static {
         BUILDER.comment("Don't forget to go outside, your love may be waiting for you <3");
 
@@ -29,17 +34,30 @@ public class Config {
         SHOW_TEXT = BUILDER.define("showText", true);
         SHADOW = BUILDER.define("shadow", true);
 
+        POSITION_X = BUILDER.defineInRange("positionX", 50, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        POSITION_Y = BUILDER.defineInRange("positionY", 50, Integer.MIN_VALUE, Integer.MAX_VALUE);
+
         SPEC = BUILDER.build();
     }
 
     @SubscribeEvent
     public static void onLoad(final ModConfigEvent event) {
+        if (loaded) return;
+
         text = TEXT.get();
         showText = SHOW_TEXT.get();
         shadow = SHADOW.get();
+
+        positionX = POSITION_X.get();
+        positionY = POSITION_Y.get();
+
+        loaded = true;
     }
 
     public static void save() {
+        POSITION_X.set(positionX);
+        POSITION_Y.set(positionY);
+
         TEXT.set(text);
         SHOW_TEXT.set(showText);
         SHADOW.set(shadow);

@@ -87,7 +87,13 @@ public class ConfigScreen extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        System.out.println(EditDisplayComponent.isOver(mouseX, mouseY));
+        if (EditDisplayComponent.isOver(mouseX, mouseY) && mouseButton == 0) {
+            int diffX = Config.positionX - (int) mouseX;
+            int diffY = Config.positionY - (int) mouseY;
+            
+            minecraft.setScreen(new MoveScreen(diffX, diffY));
+            return true;
+        }
         return super.mouseClicked(mouseX, mouseY, mouseButton);
     }
     
