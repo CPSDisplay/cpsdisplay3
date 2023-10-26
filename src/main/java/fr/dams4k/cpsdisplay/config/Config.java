@@ -12,20 +12,36 @@ public class Config {
     public static final ForgeConfigSpec SPEC;
     
     public static final ForgeConfigSpec.ConfigValue<String> TEXT;
-
+    public static final ForgeConfigSpec.ConfigValue<Boolean> SHOW_TEXT;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> SHADOW;
+    
+    public static boolean showText;
     public static String text;
+    public static boolean shadow;
+
+    public static int positionX;
+    public static int positionY;
 
     static {
         BUILDER.comment("Don't forget to go outside, your love may be waiting for you <3");
 
         TEXT = BUILDER.define("text", "[{0} | {1}] CPS");
+        SHOW_TEXT = BUILDER.define("showText", true);
+        SHADOW = BUILDER.define("shadow", true);
 
         SPEC = BUILDER.build();
     }
 
     @SubscribeEvent
-    static void onLoad(final ModConfigEvent event) {
-        System.out.println("------------------- Load -------------------");
+    public static void onLoad(final ModConfigEvent event) {
         text = TEXT.get();
+        showText = SHOW_TEXT.get();
+        shadow = SHADOW.get();
+    }
+
+    public static void save() {
+        TEXT.set(text);
+        SHOW_TEXT.set(showText);
+        SHADOW.set(shadow);
     }
 }

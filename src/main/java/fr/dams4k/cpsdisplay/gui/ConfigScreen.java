@@ -1,9 +1,13 @@
 package fr.dams4k.cpsdisplay.gui;
 
+import fr.dams4k.cpsdisplay.References;
 import fr.dams4k.cpsdisplay.config.Config;
 import fr.dams4k.cpsdisplay.gui.components.SliderButton;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.components.MultiLineEditBox;
+import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.client.gui.layouts.GridLayout;
 import net.minecraft.client.gui.layouts.SpacerElement;
@@ -11,7 +15,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 public class ConfigScreen extends Screen {
-    private static final Component TITLE = Component.translatable("cpsdisplay.config.title");
+    public static final Component TITLE = Component.translatable("cpsdisplay.config.title");
 
     private static final Component ENABLED = Component.translatable("cpsdisplay.config.enabled");
     private static final Component DISABLED = Component.translatable("cpsdisplay.config.disabled");
@@ -20,7 +24,19 @@ public class ConfigScreen extends Screen {
 
     private static final Component SHADOW = Component.translatable("cpsdisplay.config.showShadow");
 
+    private static final Component DONE = Component.translatable("gui.done");
+
+    
     private MultiLineEditBox textEditBox;
+
+    private CycleButton<Boolean> enableModCycle = CycleButton.booleanBuilder(ENABLED, DISABLED)
+            .displayOnlyValue()
+            .create(0, 0, 250, 20, null);
+        
+    private CycleButton<Boolean> shadowCycle = CycleButton.booleanBuilder(ENABLED, DISABLED).create(0, 0, 120, 20, SHADOW);
+
+    private SliderButton sliderButton = new SliderButton(0, 0, 120, 20, title, 0.5);
+
 
     public ConfigScreen() {
         super(TITLE);
@@ -34,19 +50,20 @@ public class ConfigScreen extends Screen {
         );
         textEditBox.setValue(Config.text);
 
+        shadowCycle.setValue(Config.shadow);
+        enableModCycle.setValue(Config.showText);
+
         GridLayout gridlayout = new GridLayout();
         gridlayout.defaultCellSetting().paddingHorizontal(5).paddingBottom(4).alignHorizontallyCenter();
         GridLayout.RowHelper gridlayout$rowhelper = gridlayout.createRowHelper(2);
         
-        CycleButton<Boolean> enableModCycle = CycleButton.booleanBuilder(ENABLED, DISABLED)
-            .displayOnlyValue()
-            .create(0, 0, 250, 20, null);
-        
-        CycleButton<Boolean> shadowCycle = CycleButton.booleanBuilder(ENABLED, DISABLED).create(0, 0, 120, 20, SHADOW);
+        Button doneButton = Button.builder(DONE, (btn) -> {
+            onClose();
+        }).build();
 
-        
-        SliderButton sliderButton = new SliderButton(0, 0, 120, 20, title, 3);
+        StringWidget modNameWidget = new StringWidget(Component.translatable("cpsdisplay.title", References.MOD_NAME, References.MOD_VERSION), font);
 
+        gridlayout$rowhelper.addChild(modNameWidget, 2);
         gridlayout$rowhelper.addChild(enableModCycle, 2);
         gridlayout$rowhelper.addChild(SpacerElement.height(2), 2);
         gridlayout$rowhelper.addChild(shadowCycle);
@@ -54,6 +71,9 @@ public class ConfigScreen extends Screen {
 
         gridlayout$rowhelper.addChild(textEditBox, 2);
         
+        gridlayout$rowhelper.addChild(SpacerElement.height(2), 2);
+        gridlayout$rowhelper.addChild(doneButton, 2);
+
         gridlayout.arrangeElements();
         FrameLayout.alignInRectangle(gridlayout, 0, this.height / 6 - 12, this.width, this.height, 0.5F, 0.0F);
         gridlayout.visitWidgets(this::addRenderableWidget);
@@ -61,7 +81,23 @@ public class ConfigScreen extends Screen {
 
     @Override
     public void onClose() {
-        Config.TEXT.set(textEditBox.getValue());
+        Config.save();
         super.onClose();
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+        System.out.println(EditDisplayComponent.isOver(mouseX, mouseY));
+        return super.mouseClicked(mouseX, mouseY, mouseButton);
+    }
+    
+    @Override
+    public void render(GuiGraphics guiGraphics, int p_281550_, int p_282878_, float p_282465_) {
+        Config.text = textEditBox.getValue();
+        Config.shadow = shadowCycle.getValue();
+        Config.showText = enableModCycle.getValue();
+
+        super.render(guiGraphics, p_281550_, p_282878_, p_282465_);
+        EditDisplayComponent.render(guiGraphics);
     }
 }

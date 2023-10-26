@@ -7,6 +7,8 @@ import fr.dams4k.cpsdisplay.References;
 import fr.dams4k.cpsdisplay.config.Config;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
@@ -15,7 +17,7 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = References.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class DisplayComponent {
-    private static final Minecraft mc = Minecraft.getInstance();
+    protected static final Minecraft mc = Minecraft.getInstance();
     // Minecraft keys
     private static final KeyMapping KEY_ATTACK = mc.options.keyAttack;
     private static final KeyMapping KEY_USE = mc.options.keyUse;
@@ -27,19 +29,52 @@ public class DisplayComponent {
     private static List<Long> useClicks = new ArrayList<Long>();
 
     public static final IGuiOverlay OVERLAY = (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
-        String text = Config.TEXT.get();
+        if (mc.screen != null) {
+            if (mc.screen.getTitle() == ConfigScreen.TITLE) return;
+        }
+        DisplayComponent.render(guiGraphics);
+        // String text = Config.TEXT.get();
+        // text = text.replace("{0}", getAttackCPS().toString());
+        // text = text.replace("{1}", getUseCPS().toString());
+        // text = text.replace("&", "§");
+
+        // String[] lines = text.split("\n");
+
+        // if (mc.screen != null) {
+        //     if (mc.screen.getTitle() == ConfigScreen.TITLE) return;
+        // }
+
+        // for (int i = 0; i < lines.length; i++) {
+        //     String line = lines[i];
+        //     guiGraphics.drawCenteredString(mc.font, line, mc.getWindow().getGuiScaledWidth()/2, 200 + i * mc.font.lineHeight, 0xffffff);
+        // }
+    };
+
+    public static void render(GuiGraphics guiGraphics) {
+        if (!Config.showText) return;
+
+        String text = Config.text;
         text = text.replace("{0}", getAttackCPS().toString());
         text = text.replace("{1}", getUseCPS().toString());
         text = text.replace("&", "§");
 
         String[] lines = text.split("\n");
-        int maxWidth = 0;
-
+       
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
-            guiGraphics.drawCenteredString(mc.font, line, mc.getWindow().getGuiScaledWidth()/2, 200 + i * mc.font.lineHeight, 0xffffff);
+            drawCenteredString(
+                guiGraphics, mc.font,
+                line, mc.getWindow().getGuiScaledWidth()/2, 200 + i * mc.font.lineHeight,
+                0xffffff, Config.shadow
+            );
+            // guiGraphics.drawCenteredString(mc.font, line, mc.getWindow().getGuiScaledWidth()/2, 200 + i * mc.font.lineHeight, 0xffffff);
         }
-    };
+    }
+
+    public static void drawCenteredString(GuiGraphics guiGraphics, Font font, String text, int x, int y, int color, boolean shadow) {
+        guiGraphics.drawString(font, text, x - font.width(text) / 2, y, color, shadow);
+    }
+
 
     @SubscribeEvent
     public static void onInput(InputEvent event) {

@@ -1,4 +1,5 @@
 {
+    "cpsdisplay.title": "%s - v%s",
     "cpsdisplay.config.enabled": "§aEnabled",
     "cpsdisplay.config.disabled": "§cDisabled",
     "cpsdisplay.config.showShadow": "Shadow",
