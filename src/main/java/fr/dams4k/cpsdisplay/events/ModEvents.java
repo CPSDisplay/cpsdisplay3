@@ -1,11 +1,17 @@
 package fr.dams4k.cpsdisplay.events;
 
-import org.lwjgl.glfw.GLFW;
-import org.stringtemplate.v4.ST;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Scanner;
 
+import org.lwjgl.glfw.GLFW;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.mojang.blaze3d.platform.InputConstants;
 
 import fr.dams4k.cpsdisplay.References;
+import fr.dams4k.cpsdisplay.VersionChecker;
 import fr.dams4k.cpsdisplay.gui.ConfigScreen;
 import fr.dams4k.cpsdisplay.gui.DisplayComponent;
 import net.minecraft.client.KeyMapping;
@@ -50,23 +56,51 @@ public class ModEvents {
         @SubscribeEvent
         public static void onClientJoinWorld(EntityJoinLevelEvent event) {
             if (used) return;
-            
-            if (event.getEntity() instanceof Player) {
-                Player player = (Player) event.getEntity();
-                System.out.println(player.getName());
-                
+            if (!(event.getEntity() instanceof Player)) return;
 
-                MutableComponent message = Component.translatable("cpsdisplay.version.modName");
-                message.append(Component.translatable("cpsdisplay.version.description"));
-                
-                Style urlStyle = Style.EMPTY.withClickEvent(
-                    new ClickEvent(ClickEvent.Action.OPEN_URL, References.CURSEFORGE_URL));
-                Component url = Component.translatable("cpsdisplay.version.url").setStyle(urlStyle);
-                message.append(url);
+            boolean updateAvailable = false;
+            try {
+                URL githubLatestRelease = new URL(References.MOD_GITHUB_LASTEST_RELEASE);
+                Scanner scanner = new Scanner(githubLatestRelease.openStream());
+                String response = scanner.useDelimiter("\\Z").next();
 
-                player.sendSystemMessage(message);
-                used = true;
+                JsonParser parser = new JsonParser();
+                JsonObject jsonObject = (JsonObject) parser.parse(response);
+
+                String latestTag = jsonObject.get("tag_name").getAsString();
+                String version = latestTag;
+                int releaseVersion = -1;
+
+                if (latestTag.indexOf("-") != -1) {
+                    version = latestTag.split("-")[0];
+                    releaseVersion = Integer.parseInt(latestTag.split("-")[1]);
+                }
+
+                VersionChecker versionChecker = new VersionChecker(References.MOD_VERSION);
+                int comparison = versionChecker.compareTo(version);
+                if (comparison == VersionChecker.UPPER) {
+                    updateAvailable = true;
+                } else if (comparison == VersionChecker.SAME && releaseVersion != -1 && References.RELEASE_TYPE.getVersion() < releaseVersion) {
+                    updateAvailable = true;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+
+            if (!updateAvailable) return;
+
+            Player player = (Player) event.getEntity();
+            
+            MutableComponent message = Component.translatable("cpsdisplay.version.modName");
+            message.append(Component.translatable("cpsdisplay.version.description"));
+            
+            Style urlStyle = Style.EMPTY.withClickEvent(
+                new ClickEvent(ClickEvent.Action.OPEN_URL, References.CURSEFORGE_URL));
+            Component url = Component.translatable("cpsdisplay.version.url").setStyle(urlStyle);
+            message.append(url);
+
+            player.sendSystemMessage(message);
+            used = true;
         }
     }
     
