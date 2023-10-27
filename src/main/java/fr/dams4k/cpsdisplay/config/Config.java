@@ -18,12 +18,16 @@ public class Config {
     public static final ForgeConfigSpec.IntValue POSITION_X;
     public static final ForgeConfigSpec.IntValue POSITION_Y;
     
+    public static final ForgeConfigSpec.ConfigValue<String> TEXT_COLOR;
+
     public static boolean showText;
     public static String text;
     public static boolean shadow;
 
     public static int positionX;
     public static int positionY;
+
+    public static String textColor;
 
     public static boolean loaded = false; // TODO: Why did i need to have this fking variable? Change i change Config values, it automatically save and reload, that's annoying af
 
@@ -36,6 +40,8 @@ public class Config {
 
         POSITION_X = BUILDER.defineInRange("positionX", 50, Integer.MIN_VALUE, Integer.MAX_VALUE);
         POSITION_Y = BUILDER.defineInRange("positionY", 50, Integer.MIN_VALUE, Integer.MAX_VALUE);
+
+        TEXT_COLOR = BUILDER.define("textColor", "ffffff");
 
         SPEC = BUILDER.build();
     }
@@ -51,15 +57,19 @@ public class Config {
         positionX = POSITION_X.get();
         positionY = POSITION_Y.get();
 
+        textColor = TEXT_COLOR.get();
+
         loaded = true;
     }
 
     public static void save() {
-        POSITION_X.set(positionX);
-        POSITION_Y.set(positionY);
-
         TEXT.set(text);
         SHOW_TEXT.set(showText);
         SHADOW.set(shadow);
+
+        POSITION_X.set(positionX);
+        POSITION_Y.set(positionY);
+
+        TEXT_COLOR.set(textColor);
     }
 }

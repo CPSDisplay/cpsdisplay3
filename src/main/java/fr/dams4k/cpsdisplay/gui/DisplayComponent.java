@@ -2,8 +2,7 @@ package fr.dams4k.cpsdisplay.gui;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.lwjgl.opengl.GL11;
+import java.awt.Color;
 
 import fr.dams4k.cpsdisplay.References;
 import fr.dams4k.cpsdisplay.config.Config;
@@ -16,7 +15,6 @@ import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
 
 @Mod.EventBusSubscriber(modid = References.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class DisplayComponent {
@@ -68,7 +66,7 @@ public class DisplayComponent {
             drawCenteredString(
                 guiGraphics, mc.font,
                 line, Config.positionX, Config.positionY + i * mc.font.lineHeight,
-                0xffffff, Config.shadow
+                Integer.valueOf(Config.textColor, 16), Config.shadow
             );
         }
     }

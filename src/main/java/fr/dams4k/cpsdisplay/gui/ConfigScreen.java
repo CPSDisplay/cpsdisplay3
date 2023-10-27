@@ -6,6 +6,7 @@ import fr.dams4k.cpsdisplay.gui.components.SliderButton;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.MultiLineEditBox;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.layouts.FrameLayout;
@@ -35,7 +36,8 @@ public class ConfigScreen extends Screen {
         
     private CycleButton<Boolean> shadowCycle = CycleButton.booleanBuilder(ENABLED, DISABLED).create(0, 0, 120, 20, SHADOW);
 
-    private SliderButton sliderButton = new SliderButton(0, 0, 120, 20, title, 0.5);
+    // private SliderButton sliderButton = new SliderButton(0, 0, 120, 20, title, 0.5);
+    private EditBox textColorEditBox;
 
 
     public ConfigScreen() {
@@ -49,6 +51,10 @@ public class ConfigScreen extends Screen {
             TEXT_DEFAULT, title
         );
         textEditBox.setValue(Config.text);
+
+        textColorEditBox = new EditBox(font, 120, 20, title);
+        textColorEditBox.setValue(Config.textColor);
+        textColorEditBox.setMaxLength(6);
 
         shadowCycle.setValue(Config.shadow);
         enableModCycle.setValue(Config.showText);
@@ -67,7 +73,7 @@ public class ConfigScreen extends Screen {
         gridlayout$rowhelper.addChild(enableModCycle, 2);
         gridlayout$rowhelper.addChild(SpacerElement.height(2), 2);
         gridlayout$rowhelper.addChild(shadowCycle);
-        gridlayout$rowhelper.addChild(sliderButton);
+        gridlayout$rowhelper.addChild(textColorEditBox);
 
         gridlayout$rowhelper.addChild(textEditBox, 2);
         
@@ -102,6 +108,21 @@ public class ConfigScreen extends Screen {
         Config.text = textEditBox.getValue();
         Config.shadow = shadowCycle.getValue();
         Config.showText = enableModCycle.getValue();
+        
+        String textColor = textColorEditBox.getValue().toLowerCase();
+        if (textColor.length() == 6) {
+            boolean correctCharacters = true;
+            for (char c : textColor.toCharArray()) {
+                correctCharacters = correctCharacters && "0123456789abcdef".indexOf(c) != -1;
+            }
+            if (correctCharacters) {
+                Config.textColor = textColor;
+            }
+        } else if (textColor.length() == 0) {
+            textColorEditBox.setSuggestion("ffffff");
+        } else {
+            textColorEditBox.setSuggestion("");
+        }
 
         super.render(guiGraphics, p_281550_, p_282878_, p_282465_);
         EditDisplayComponent.render(guiGraphics);
