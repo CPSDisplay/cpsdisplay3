@@ -1,22 +1,20 @@
 package fr.dams4k.cpsdisplay.events;
 
 import org.lwjgl.glfw.GLFW;
+import org.stringtemplate.v4.ST;
 
 import com.mojang.blaze3d.platform.InputConstants;
 
 import fr.dams4k.cpsdisplay.References;
 import fr.dams4k.cpsdisplay.gui.ConfigScreen;
 import fr.dams4k.cpsdisplay.gui.DisplayComponent;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.HoverEvent.Action;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ClickAction;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
@@ -57,11 +55,16 @@ public class ModEvents {
                 Player player = (Player) event.getEntity();
                 System.out.println(player.getName());
                 
-                Style style = Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://cpsdisplay.github.io"));
-                // Style style = new Style.create(false, false, false, false, false, false, 
-                //     new ClickEvent(ClickEvent.Action.OPEN_URL, "https://cpsdisplay.github.io")
-                // , null, null, null);
-                player.sendSystemMessage(Component.translatable("qsdqsqZQZsazdqdzd").setStyle(style));
+
+                MutableComponent message = Component.translatable("cpsdisplay.version.modName");
+                message.append(Component.translatable("cpsdisplay.version.description"));
+                
+                Style urlStyle = Style.EMPTY.withClickEvent(
+                    new ClickEvent(ClickEvent.Action.OPEN_URL, References.CURSEFORGE_URL));
+                Component url = Component.translatable("cpsdisplay.version.url").setStyle(urlStyle);
+                message.append(url);
+
+                player.sendSystemMessage(message);
                 used = true;
             }
         }

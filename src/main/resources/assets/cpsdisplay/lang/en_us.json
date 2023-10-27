@@ -3,5 +3,8 @@
     "cpsdisplay.config.enabled": "§aEnabled",
     "cpsdisplay.config.disabled": "§cDisabled",
     "cpsdisplay.config.showShadow": "Shadow",
-    "cpsdisplay.config.defaultText": "[{0} | {1}] CPS"
+    "cpsdisplay.config.defaultText": "[{0} | {1}] CPS",
+    "cpsdisplay.version.modName": "§7§l[CPS Display]§r",
+    "cpsdisplay.version.description": " §7A new version is ",
+    "cpsdisplay.version.url": "§3§navailable"
 }
