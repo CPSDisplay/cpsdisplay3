@@ -2,7 +2,6 @@ package fr.dams4k.cpsdisplay.gui;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.Color;
 
 import fr.dams4k.cpsdisplay.References;
 import fr.dams4k.cpsdisplay.config.Config;

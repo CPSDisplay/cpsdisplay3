@@ -67,7 +67,11 @@ public class ConfigScreen extends Screen {
             onClose();
         }).build();
 
-        StringWidget modNameWidget = new StringWidget(Component.translatable("cpsdisplay.title", References.MOD_NAME, References.MOD_VERSION), font);
+        String modVersion = References.MOD_VERSION;
+        if (References.RELEASE_TYPE != References.ReleaseType.RELEASE) {
+            modVersion += " (" + References.RELEASE_TYPE.getString() + ")";
+        }
+        StringWidget modNameWidget = new StringWidget(Component.translatable("cpsdisplay.title", References.MOD_NAME, modVersion), font);
 
         gridlayout$rowhelper.addChild(modNameWidget, 2);
         gridlayout$rowhelper.addChild(enableModCycle, 2);
