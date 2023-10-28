@@ -11,6 +11,7 @@ import com.google.gson.JsonParser;
 import com.mojang.blaze3d.platform.InputConstants;
 
 import fr.dams4k.cpsdisplay.References;
+import fr.dams4k.cpsdisplay.References.ReleaseType;
 import fr.dams4k.cpsdisplay.VersionChecker;
 import fr.dams4k.cpsdisplay.gui.ConfigScreen;
 import fr.dams4k.cpsdisplay.gui.DisplayComponent;
@@ -70,19 +71,25 @@ public class ModEvents {
 
                 String latestTag = jsonObject.get("tag_name").getAsString();
                 String version = latestTag;
-                int releaseVersion = -1;
+                ReleaseType releaseType = ReleaseType.ALPHA;
 
                 if (latestTag.indexOf("-") != -1) {
                     version = latestTag.split("-")[0];
-                    releaseVersion = Integer.parseInt(latestTag.split("-")[1]);
+                    releaseType = ReleaseType.getFromString(latestTag.split("-")[1]);
                 }
 
                 VersionChecker versionChecker = new VersionChecker(References.MOD_VERSION);
                 int comparison = versionChecker.compareTo(version);
                 if (comparison == VersionChecker.LOWER) {
                     updateAvailable = true;
-                } else if (comparison == VersionChecker.SAME && releaseVersion != -1 && References.RELEASE_TYPE.getVersion() < releaseVersion) {
-                    updateAvailable = true;
+                } else if (comparison == VersionChecker.SAME) {
+                    boolean newReleaseVersion = releaseType.getVersion() > References.RELEASE_TYPE.getVersion(); // Need to check this before compareTo because for some reasons it keep on reseting "version" to 0 like wtf dude
+
+                    if (releaseType.compareTo(References.RELEASE_TYPE) > 0) {
+                        updateAvailable = true;
+                    } else if (releaseType.compareTo(References.RELEASE_TYPE) == 0 && newReleaseVersion) {
+                        updateAvailable = true;
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();

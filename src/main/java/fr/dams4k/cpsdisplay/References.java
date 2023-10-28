@@ -43,13 +43,11 @@ public class References {
 			ReleaseType DEFAULT = ReleaseType.RELEASE;
 
 			if (str.length() < 2) return DEFAULT;
-		
 			int releaseVersion = 0;
 			try {
 				releaseVersion = Integer.parseInt(str.substring(1));
-			} catch (Exception e) {
-				return DEFAULT;
-			}
+			} catch (Exception e) {}
+
 			String releaseName = str.substring(0, 1);
 
 			switch (releaseName) {

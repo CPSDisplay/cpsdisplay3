@@ -2,7 +2,6 @@ package fr.dams4k.cpsdisplay.gui;
 
 import fr.dams4k.cpsdisplay.References;
 import fr.dams4k.cpsdisplay.config.Config;
-import fr.dams4k.cpsdisplay.gui.components.SliderButton;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
