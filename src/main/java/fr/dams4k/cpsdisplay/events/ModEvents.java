@@ -58,6 +58,7 @@ public class ModEvents {
             if (used) return;
             if (!(event.getEntity() instanceof Player)) return;
 
+            used = true;
             boolean updateAvailable = false;
             try {
                 URL githubLatestRelease = new URL(References.MOD_GITHUB_LASTEST_RELEASE);
@@ -78,7 +79,7 @@ public class ModEvents {
 
                 VersionChecker versionChecker = new VersionChecker(References.MOD_VERSION);
                 int comparison = versionChecker.compareTo(version);
-                if (comparison == VersionChecker.UPPER) {
+                if (comparison == VersionChecker.LOWER) {
                     updateAvailable = true;
                 } else if (comparison == VersionChecker.SAME && releaseVersion != -1 && References.RELEASE_TYPE.getVersion() < releaseVersion) {
                     updateAvailable = true;
@@ -100,7 +101,6 @@ public class ModEvents {
             message.append(url);
 
             player.sendSystemMessage(message);
-            used = true;
         }
     }
     
