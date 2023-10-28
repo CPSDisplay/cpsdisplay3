@@ -5,7 +5,7 @@ public class References {
 	public static final String MOD_NAME = "CPSDisplay";
 	public static final String MOD_VERSION = "3.0.0";
 	
-	public static final ReleaseType RELEASE_TYPE = ReleaseType.ALPHA.v(1);
+	public static final ReleaseType RELEASE_TYPE = ReleaseType.ALPHA.v(2);
 
     public static final String MOD_GITHUB_LASTEST_RELEASE = "https://api.github.com/repos/CPSDisplay/cpsdisplay3/releases/latest";
 	public static final String CURSEFORGE_URL = "https://www.curseforge.com/minecraft/mc-mods/cpsdisplay";

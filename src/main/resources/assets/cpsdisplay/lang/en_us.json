@@ -1,4 +1,6 @@
 {
+    "cpsdisplay.key.opengui": "Open Config Gui",
+    "cpsdisplay.category.cpsdisplay": "CPS Display",
     "cpsdisplay.title": "%s - v%s",
     "cpsdisplay.config.enabled": "§aEnabled",
     "cpsdisplay.config.disabled": "§cDisabled",
