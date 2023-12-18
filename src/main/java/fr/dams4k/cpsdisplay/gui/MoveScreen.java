@@ -2,6 +2,7 @@ package fr.dams4k.cpsdisplay.gui;
 
 import fr.dams4k.cpsdisplay.config.Config;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 

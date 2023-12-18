@@ -8,13 +8,14 @@ import net.minecraft.commands.Commands;
 public class ConfigCommand {
     public static void register(CommandDispatcher<CommandSourceStack> commandDispatcher) {
         commandDispatcher.register(Commands.literal("cpsdisplay").executes(
-            (context) -> {
-                return openConfigMenu();
+            (cmd) -> {
+                return openConfigMenu(cmd.getSource());
             }
         ));
     }
 
-    private static int openConfigMenu() {
+    private static int openConfigMenu(CommandSourceStack sourceStack) {
+        System.out.println("hi");
         return 1;
     }
 }

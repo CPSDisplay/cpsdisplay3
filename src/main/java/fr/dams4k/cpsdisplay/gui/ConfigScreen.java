@@ -2,6 +2,7 @@ package fr.dams4k.cpsdisplay.gui;
 
 import fr.dams4k.cpsdisplay.References;
 import fr.dams4k.cpsdisplay.config.Config;
+import fr.dams4k.cpsdisplay.gui.components.SliderButton;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
@@ -51,7 +52,7 @@ public class ConfigScreen extends Screen {
         );
         textEditBox.setValue(Config.text);
 
-        textColorEditBox = new EditBox(font, 120, 20, title);
+        textColorEditBox = new EditBox(font, 120, 20, 120, 20, title);
         textColorEditBox.setValue(Config.textColor);
         textColorEditBox.setMaxLength(6);
 

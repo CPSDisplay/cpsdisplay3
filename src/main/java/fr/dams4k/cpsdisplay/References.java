@@ -5,7 +5,7 @@ public class References {
 	public static final String MOD_NAME = "CPSDisplay";
 	public static final String MOD_VERSION = "3.0.0";
 	
-	public static final ReleaseType RELEASE_TYPE = ReleaseType.ALPHA.v(2);
+	public static final ReleaseType RELEASE_TYPE = ReleaseType.ALPHA.v(1);
 
     public static final String MOD_GITHUB_LASTEST_RELEASE = "https://api.github.com/repos/CPSDisplay/cpsdisplay3/releases/latest";
 	public static final String CURSEFORGE_URL = "https://www.curseforge.com/minecraft/mc-mods/cpsdisplay";
@@ -43,11 +43,13 @@ public class References {
 			ReleaseType DEFAULT = ReleaseType.RELEASE;
 
 			if (str.length() < 2) return DEFAULT;
+		
 			int releaseVersion = 0;
 			try {
 				releaseVersion = Integer.parseInt(str.substring(1));
-			} catch (Exception e) {}
-
+			} catch (Exception e) {
+				return DEFAULT;
+			}
 			String releaseName = str.substring(0, 1);
 
 			switch (releaseName) {
