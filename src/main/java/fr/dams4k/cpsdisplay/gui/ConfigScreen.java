@@ -2,17 +2,24 @@ package fr.dams4k.cpsdisplay.gui;
 
 import fr.dams4k.cpsdisplay.References;
 import fr.dams4k.cpsdisplay.config.Config;
+import net.minecraft.SharedConstants;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.MultiLineEditBox;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.client.gui.layouts.GridLayout;
 import net.minecraft.client.gui.layouts.SpacerElement;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.telemetry.TelemetryProperty;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.common.MinecraftForge;
 
 public class ConfigScreen extends Screen {
     public static final Component TITLE = Component.translatable("cpsdisplay.config.title");
@@ -51,7 +58,7 @@ public class ConfigScreen extends Screen {
         );
         textEditBox.setValue(Config.text);
 
-        textColorEditBox = new EditBox(font, 120, 20, title);
+        textColorEditBox = new EditBox(font, 0, 0, 120, 20, title);
         textColorEditBox.setValue(Config.textColor);
         textColorEditBox.setMaxLength(6);
 
@@ -127,7 +134,12 @@ public class ConfigScreen extends Screen {
             textColorEditBox.setSuggestion("");
         }
 
+        if ("1.20 1.20.1".contains(SharedConstants.getCurrentVersion().getId())) {
+            this.renderBackground(guiGraphics);
+        }
         super.render(guiGraphics, p_281550_, p_282878_, p_282465_);
+        
+
         EditDisplayComponent.render(guiGraphics);
     }
 }
