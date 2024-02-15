@@ -17,6 +17,8 @@ public class Config {
 
     public static final ForgeConfigSpec.IntValue POSITION_X;
     public static final ForgeConfigSpec.IntValue POSITION_Y;
+
+    public static final ForgeConfigSpec.DoubleValue SCALE;
     
     public static final ForgeConfigSpec.ConfigValue<String> TEXT_COLOR;
 
@@ -26,6 +28,8 @@ public class Config {
 
     public static int positionX;
     public static int positionY;
+
+    public static float scale;
 
     public static String textColor;
 
@@ -40,6 +44,8 @@ public class Config {
 
         POSITION_X = BUILDER.defineInRange("positionX", 50, Integer.MIN_VALUE, Integer.MAX_VALUE);
         POSITION_Y = BUILDER.defineInRange("positionY", 50, Integer.MIN_VALUE, Integer.MAX_VALUE);
+
+        SCALE = BUILDER.defineInRange("scale", 1d, 0.1d, 4d);
 
         TEXT_COLOR = BUILDER.define("textColor", "ffffff");
 
@@ -57,6 +63,8 @@ public class Config {
         positionX = POSITION_X.get();
         positionY = POSITION_Y.get();
 
+        scale = SCALE.get().floatValue();
+
         textColor = TEXT_COLOR.get();
 
         loaded = true;
@@ -69,6 +77,8 @@ public class Config {
 
         POSITION_X.set(positionX);
         POSITION_Y.set(positionY);
+
+        SCALE.set((double) scale);
 
         TEXT_COLOR.set(textColor);
     }

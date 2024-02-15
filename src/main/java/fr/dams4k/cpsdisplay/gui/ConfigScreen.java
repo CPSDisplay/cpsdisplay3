@@ -2,24 +2,19 @@ package fr.dams4k.cpsdisplay.gui;
 
 import fr.dams4k.cpsdisplay.References;
 import fr.dams4k.cpsdisplay.config.Config;
+import fr.dams4k.cpsdisplay.gui.components.SliderButton;
 import net.minecraft.SharedConstants;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.MultiLineEditBox;
-import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.layouts.FrameLayout;
 import net.minecraft.client.gui.layouts.GridLayout;
 import net.minecraft.client.gui.layouts.SpacerElement;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.telemetry.TelemetryProperty;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.common.MinecraftForge;
 
 public class ConfigScreen extends Screen {
     public static final Component TITLE = Component.translatable("cpsdisplay.config.title");
@@ -42,7 +37,7 @@ public class ConfigScreen extends Screen {
         
     private CycleButton<Boolean> shadowCycle = CycleButton.booleanBuilder(ENABLED, DISABLED).create(0, 0, 120, 20, SHADOW);
 
-    // private SliderButton sliderButton = new SliderButton(0, 0, 120, 20, title, 0.5);
+    private SliderButton sliderButton = new SliderButton(0, 0, 250, 20, title, 1, 0.5, 4);
     private EditBox textColorEditBox;
 
 
@@ -57,6 +52,8 @@ public class ConfigScreen extends Screen {
             TEXT_DEFAULT, title
         );
         textEditBox.setValue(Config.text);
+
+        sliderButton.setValue(Config.scale);
 
         textColorEditBox = new EditBox(font, 0, 0, 120, 20, title);
         textColorEditBox.setValue(Config.textColor);
@@ -86,7 +83,8 @@ public class ConfigScreen extends Screen {
         gridlayout$rowhelper.addChild(textColorEditBox);
 
         gridlayout$rowhelper.addChild(textEditBox, 2);
-        
+        gridlayout$rowhelper.addChild(sliderButton, 2);
+
         gridlayout$rowhelper.addChild(SpacerElement.height(2), 2);
         gridlayout$rowhelper.addChild(doneButton, 2);
 
@@ -118,6 +116,8 @@ public class ConfigScreen extends Screen {
         Config.text = textEditBox.getValue();
         Config.shadow = shadowCycle.getValue();
         Config.showText = enableModCycle.getValue();
+
+        Config.scale = (float) sliderButton.getValue();
         
         String textColor = textColorEditBox.getValue().toLowerCase();
         if (textColor.length() == 6) {

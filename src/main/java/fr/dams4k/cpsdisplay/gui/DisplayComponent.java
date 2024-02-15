@@ -33,21 +33,6 @@ public class DisplayComponent {
             if (mc.screen.getTitle() == ConfigScreen.TITLE) return;
         }
         DisplayComponent.render(guiGraphics);
-        // String text = Config.TEXT.get();
-        // text = text.replace("{0}", getAttackCPS().toString());
-        // text = text.replace("{1}", getUseCPS().toString());
-        // text = text.replace("&", "§");
-
-        // String[] lines = text.split("\n");
-
-        // if (mc.screen != null) {
-        //     if (mc.screen.getTitle() == ConfigScreen.TITLE) return;
-        // }
-
-        // for (int i = 0; i < lines.length; i++) {
-        //     String line = lines[i];
-        //     guiGraphics.drawCenteredString(mc.font, line, mc.getWindow().getGuiScaledWidth()/2, 200 + i * mc.font.lineHeight, 0xffffff);
-        // }
     };
 
     public static void render(GuiGraphics guiGraphics) {
@@ -71,7 +56,9 @@ public class DisplayComponent {
     }
 
     public static void drawCenteredString(GuiGraphics guiGraphics, Font font, String text, int x, int y, int color, boolean shadow) {
-        guiGraphics.drawString(font, text, x - font.width(text) / 2, y, color, shadow);
+        guiGraphics.pose().scale(Config.scale, Config.scale, 1f);
+        // guiGraphics.pose().rotateAround(null, x, y, color);
+        guiGraphics.drawString(font, text, (x - font.width(text) / 2) / Config.scale, (y  - font.lineHeight/2) / Config.scale, color, shadow);
     }
 
 
