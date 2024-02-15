@@ -3,6 +3,8 @@ package fr.dams4k.cpsdisplay.gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import fr.dams4k.cpsdisplay.References;
 import fr.dams4k.cpsdisplay.config.Config;
 import net.minecraft.client.KeyMapping;
@@ -55,7 +57,7 @@ public class DisplayComponent {
         }
     }
 
-    public static void drawCenteredString(GuiGraphics guiGraphics, Font font, String text, int x, int y, int color, boolean shadow) {
+    public static void drawCenteredString(GuiGraphics guiGraphics, Font font, @Nonnull String text, int x, int y, int color, boolean shadow) {
         guiGraphics.pose().scale(Config.scale, Config.scale, 1f);
         // guiGraphics.pose().rotateAround(null, x, y, color);
         guiGraphics.drawString(font, text, (x - font.width(text) / 2) / Config.scale, (y  - font.lineHeight/2) / Config.scale, color, shadow);
