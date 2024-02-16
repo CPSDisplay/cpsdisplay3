@@ -91,6 +91,7 @@ public class ModEvents {
                         updateAvailable = true;
                     }
                 }
+                scanner.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

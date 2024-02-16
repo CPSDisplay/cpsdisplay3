@@ -8,5 +8,6 @@
     "cpsdisplay.config.defaultText": "[{0} | {1}] CPS",
     "cpsdisplay.version.modName": "§7§l[CPS Display]§r",
     "cpsdisplay.version.description": " §7A new version is ",
-    "cpsdisplay.version.url": "§3§navailable"
+    "cpsdisplay.version.url": "§3§navailable",
+    "cpsdisplay.config.scale": "Scale: %s%%"
 }

@@ -19,6 +19,8 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = References.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class DisplayComponent {
+    public static final int HITBOX_COLOR = 0xffffffff; // aarrggbb
+
     protected static final Minecraft mc = Minecraft.getInstance();
     // Minecraft keys
     private static final KeyMapping KEY_ATTACK = mc.options.keyAttack;
@@ -37,30 +39,37 @@ public class DisplayComponent {
         DisplayComponent.render(guiGraphics);
     };
 
+    @SuppressWarnings("null")
     public static void render(GuiGraphics guiGraphics) {
         if (!Config.showText) return;
 
-        String text = Config.text;
-        text = text.replace("{0}", getAttackCPS().toString());
-        text = text.replace("{1}", getUseCPS().toString());
-        text = text.replace("&", "§");
-
+        String text = getFormattedText();
         String[] lines = text.split("\n");
        
+
+        //- Render background
+        // guiGraphics.fill
+
+        //- Render text
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
             drawCenteredString(
                 guiGraphics, mc.font,
-                line, Config.positionX, Config.positionY + i * mc.font.lineHeight,
+                line, i,
                 Integer.valueOf(Config.textColor, 16), Config.shadow
             );
         }
     }
 
-    public static void drawCenteredString(GuiGraphics guiGraphics, Font font, @Nonnull String text, int x, int y, int color, boolean shadow) {
-        guiGraphics.pose().scale(Config.scale, Config.scale, 1f);
-        // guiGraphics.pose().rotateAround(null, x, y, color);
-        guiGraphics.drawString(font, text, (x - font.width(text) / 2) / Config.scale, (y  - font.lineHeight/2) / Config.scale, color, shadow);
+    public static void drawCenteredString(GuiGraphics guiGraphics, @Nonnull Font font, @Nonnull String text, int line, int color, boolean shadow) {
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().scale(Config.scale, Config.scale, 1f); // Apply scale
+
+        float[] boundaries = getFBoundaries(font, text);
+        // We divide by Config.scale because positions will be scaled by pose().scale( ... )
+        guiGraphics.drawString(font, text, boundaries[0] / Config.scale, (boundaries[1] + boundaries[4] * line) / Config.scale, color, shadow);
+        
+        guiGraphics.pose().popPose();
     }
 
 
@@ -95,5 +104,61 @@ public class DisplayComponent {
         long currentTime = System.currentTimeMillis();
         useClicks.removeIf(e -> (e.longValue() + 1000l < currentTime));
         return useClicks.size();
+    }
+
+    // [startX, startY, endX, endY, lineWidth]
+    public static int[] getIBoundaries(Font font, @Nonnull String text) {
+        float[] boundaries = getFBoundaries(font, text);
+        return new int[]{
+            (int) boundaries[0],
+            (int) boundaries[1],
+            (int) boundaries[2],
+            (int) boundaries[3],
+            (int) boundaries[4]
+        };
+    }
+
+
+    // [startX, startY, endX, endY, lineWidth]
+    public static float[] getFBoundaries(Font font, @Nonnull String text) {
+        int textWidth = font.width(longuestLine(text));
+        float x = Config.positionX - textWidth / 2;
+        float y = Config.positionY;
+
+        int nb_lines = text.split("\n").length;
+
+        return new float[]{
+            x,
+            y,
+            x + textWidth * Config.scale,
+            y + font.lineHeight * nb_lines * Config.scale,
+            mc.font.lineHeight * Config.scale
+        };
+    }
+
+    @SuppressWarnings("null")
+    public static @Nonnull String getFormattedText() {
+        String text = Config.text;
+        text = text.replace("{0}", getAttackCPS().toString());
+        text = text.replace("{1}", getUseCPS().toString());
+        text = text.replace("&", "§");
+        return text;
+    }
+
+    @SuppressWarnings("null")
+    public static @Nonnull String longuestLine(@Nonnull String text) {
+        int maxLength = 0;
+        int idx = 0;
+
+        String[] lines = text.split("\n");
+        for (int i = 0; i < lines.length; i++) {
+            int l = lines[i].length();
+            if (l > maxLength) {
+                maxLength = lines[i].length();
+                idx = i;
+            }
+        }
+
+        return lines[idx];
     }
 }

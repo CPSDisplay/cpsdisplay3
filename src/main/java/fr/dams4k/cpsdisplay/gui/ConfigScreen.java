@@ -28,7 +28,8 @@ public class ConfigScreen extends Screen {
 
     private static final Component DONE = Component.translatable("gui.done");
 
-    
+    // private static final Component SCALE = Component.translatable("cpsdisplay.config.scale");
+
     private MultiLineEditBox textEditBox;
 
     private CycleButton<Boolean> enableModCycle = CycleButton.booleanBuilder(ENABLED, DISABLED)
@@ -37,7 +38,7 @@ public class ConfigScreen extends Screen {
         
     private CycleButton<Boolean> shadowCycle = CycleButton.booleanBuilder(ENABLED, DISABLED).create(0, 0, 120, 20, SHADOW);
 
-    private SliderButton sliderButton = new SliderButton(0, 0, 250, 20, title, 1, 0.5, 4);
+    private SliderButton sliderButton = new SliderButton(0, 0, 250, 20, "cpsdisplay.config.scale", 1, 0.5, 4);
     private EditBox textColorEditBox;
 
 

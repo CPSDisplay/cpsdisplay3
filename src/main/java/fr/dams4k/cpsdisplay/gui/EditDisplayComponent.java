@@ -1,26 +1,27 @@
 package fr.dams4k.cpsdisplay.gui;
 
-import fr.dams4k.cpsdisplay.config.Config;
 import net.minecraft.client.gui.GuiGraphics;
 
 public class EditDisplayComponent extends DisplayComponent {
     public static boolean isOver(double x, double y) {
-        int width = mc.font.width(Config.text);
-        int height = mc.font.lineHeight;
+        float[] boundaries = DisplayComponent.getFBoundaries(mc.font, DisplayComponent.getFormattedText());
 
-        int minX = Config.positionX - width/2;
-        int maxX = Config.positionX + width/2;
-
-        int minY = Config.positionY;
-        int maxY = Config.positionY + height;
-
-        boolean correctX = x > minX && maxX > x;
-        boolean correctY = y > minY && maxY > y;
+        boolean correctX = x > boundaries[0] && boundaries[2] > x;
+        boolean correctY = y > boundaries[1] && boundaries[3] > y;
 
         return correctX && correctY;
     }
 
     public static void render(GuiGraphics guiGraphics) {
         DisplayComponent.render(guiGraphics);
+
+        String text = getFormattedText();
+        if (mc.getEntityRenderDispatcher().shouldRenderHitBoxes()) {
+            int[] boundaries = DisplayComponent.getIBoundaries(mc.font, text);
+            guiGraphics.hLine(boundaries[0], boundaries[2], boundaries[1], HITBOX_COLOR);
+            guiGraphics.hLine(boundaries[0], boundaries[2], boundaries[3], HITBOX_COLOR);
+            guiGraphics.vLine(boundaries[0], boundaries[1], boundaries[3], HITBOX_COLOR);
+            guiGraphics.vLine(boundaries[2], boundaries[1], boundaries[3], HITBOX_COLOR);
+        }
     }
 }

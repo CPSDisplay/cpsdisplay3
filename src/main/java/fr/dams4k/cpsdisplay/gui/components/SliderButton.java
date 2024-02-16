@@ -1,22 +1,31 @@
 package fr.dams4k.cpsdisplay.gui.components;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.client.gui.components.AbstractSliderButton;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 
 public class SliderButton extends AbstractSliderButton {
+    public @Nonnull String titleKey = "";
+    
     public double minValue;
     public double maxValue;
 
-    public SliderButton(int x, int y, int width, int height, Component title, double value, double minValue, double maxValue) {
-        super(x, y, width, height, title, (value-minValue) / (maxValue-minValue));
-        System.out.println(value);
-        System.out.println((value-minValue) / (maxValue-minValue));
+
+    public SliderButton(int x, int y, int width, int height, @Nonnull String titleKey, double value, double minValue, double maxValue) {
+        super(x, y, width, height, CommonComponents.EMPTY, (value-minValue) / (maxValue-minValue));
+
+        this.titleKey = titleKey;
         this.minValue = minValue;
         this.maxValue = maxValue;
+
+        this.updateMessage();
     }
 
     @Override
     protected void updateMessage() {
+        this.setMessage(Component.translatable(titleKey, Math.round(this.getValue()*1000f)/10f));
     }
 
     @Override
@@ -26,6 +35,7 @@ public class SliderButton extends AbstractSliderButton {
     public void setValue(double value) {
         double percentValue = (value-minValue) / (maxValue-minValue);
         this.value = percentValue;
+        this.updateMessage();
     }
 
     public double getValue() {
