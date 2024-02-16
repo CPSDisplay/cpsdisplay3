@@ -21,6 +21,7 @@ public class Config {
     public static final ForgeConfigSpec.DoubleValue SCALE;
     
     public static final ForgeConfigSpec.ConfigValue<String> TEXT_COLOR;
+    public static final ForgeConfigSpec.BooleanValue RAINBOW;
 
     public static boolean showText;
     public static String text;
@@ -32,6 +33,7 @@ public class Config {
     public static float scale;
 
     public static String textColor;
+    public static boolean rainbow;
 
     public static boolean loaded = false; // TODO: Why did i need to have this fking variable? Change i change Config values, it automatically save and reload, that's annoying af
 
@@ -48,6 +50,7 @@ public class Config {
         SCALE = BUILDER.defineInRange("scale", 1d, 0.1d, 4d);
 
         TEXT_COLOR = BUILDER.define("textColor", "ffffff");
+        RAINBOW = BUILDER.define("rainbow", false);
 
         SPEC = BUILDER.build();
     }
@@ -66,6 +69,7 @@ public class Config {
         scale = SCALE.get().floatValue();
 
         textColor = TEXT_COLOR.get();
+        rainbow = RAINBOW.get();
 
         loaded = true;
     }
@@ -81,5 +85,6 @@ public class Config {
         SCALE.set((double) scale);
 
         TEXT_COLOR.set(textColor);
+        RAINBOW.set(rainbow);
     }
 }

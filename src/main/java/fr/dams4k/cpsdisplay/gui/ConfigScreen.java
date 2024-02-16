@@ -25,6 +25,7 @@ public class ConfigScreen extends Screen {
     private static final Component TEXT_DEFAULT = Component.translatable("cpsdisplay.config.defaultText");
 
     private static final Component SHADOW = Component.translatable("cpsdisplay.config.showShadow");
+    private static final Component RAINBOW = Component.translatable("cpsdisplay.config.showRainbow");
 
     private static final Component DONE = Component.translatable("gui.done");
 
@@ -36,7 +37,12 @@ public class ConfigScreen extends Screen {
             .displayOnlyValue()
             .create(0, 0, 250, 20, null);
         
-    private CycleButton<Boolean> shadowCycle = CycleButton.booleanBuilder(ENABLED, DISABLED).create(0, 0, 120, 20, SHADOW);
+    private CycleButton<Boolean> shadowCycle = CycleButton.booleanBuilder(ENABLED, DISABLED)
+            .create(0, 0, 120, 20, SHADOW);
+    
+    
+    private CycleButton<Boolean> rainbowCycle = CycleButton.booleanBuilder(ENABLED, DISABLED)
+            .create(0, 0, 120, 20, RAINBOW);
 
     private SliderButton sliderButton = new SliderButton(0, 0, 250, 20, "cpsdisplay.config.scale", 1, 0.5, 4);
     private EditBox textColorEditBox;
@@ -61,6 +67,7 @@ public class ConfigScreen extends Screen {
         textColorEditBox.setMaxLength(6);
 
         shadowCycle.setValue(Config.shadow);
+        rainbowCycle.setValue(Config.rainbow);
         enableModCycle.setValue(Config.showText);
 
         GridLayout gridlayout = new GridLayout();
@@ -81,7 +88,8 @@ public class ConfigScreen extends Screen {
         gridlayout$rowhelper.addChild(enableModCycle, 2);
         gridlayout$rowhelper.addChild(SpacerElement.height(2), 2);
         gridlayout$rowhelper.addChild(shadowCycle);
-        gridlayout$rowhelper.addChild(textColorEditBox);
+        gridlayout$rowhelper.addChild(rainbowCycle);
+        gridlayout$rowhelper.addChild(textColorEditBox, 2);
 
         gridlayout$rowhelper.addChild(textEditBox, 2);
         gridlayout$rowhelper.addChild(sliderButton, 2);
@@ -117,6 +125,7 @@ public class ConfigScreen extends Screen {
         Config.text = textEditBox.getValue();
         Config.shadow = shadowCycle.getValue();
         Config.showText = enableModCycle.getValue();
+        Config.rainbow = rainbowCycle.getValue();
 
         Config.scale = (float) sliderButton.getValue();
         

@@ -5,6 +5,7 @@
     "cpsdisplay.config.enabled": "§aEnabled",
     "cpsdisplay.config.disabled": "§cDisabled",
     "cpsdisplay.config.showShadow": "Shadow",
+    "cpsdisplay.config.showRainbow": "Rainbow",
     "cpsdisplay.config.defaultText": "[{0} | {1}] CPS",
     "cpsdisplay.version.modName": "§7§l[CPS Display]§r",
     "cpsdisplay.version.description": " §7A new version is ",
