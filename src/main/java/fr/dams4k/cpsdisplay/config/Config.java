@@ -1,5 +1,7 @@
 package fr.dams4k.cpsdisplay.config;
 
+import java.awt.Color;
+
 import fr.dams4k.cpsdisplay.References;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -86,5 +88,14 @@ public class Config {
 
         TEXT_COLOR.set(textColor);
         RAINBOW.set(rainbow);
+    }
+
+    
+    public static int getTextColor() {
+        if (!rainbow) {
+            return Integer.valueOf(textColor, 16);
+        } else {
+            return Color.HSBtoRGB((float) (System.currentTimeMillis() * 0.01 % 100l)/ 100f, 0.8f, 0.8f);
+        }
     }
 }

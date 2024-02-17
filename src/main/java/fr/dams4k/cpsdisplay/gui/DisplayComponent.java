@@ -56,7 +56,7 @@ public class DisplayComponent {
             drawCenteredString(
                 guiGraphics, mc.font,
                 line, i,
-                Integer.valueOf(Config.textColor, 16), Config.shadow
+                Config.getTextColor(), Config.shadow
             );
         }
     }

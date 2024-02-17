@@ -25,7 +25,7 @@ public class SliderButton extends AbstractSliderButton {
 
     @Override
     protected void updateMessage() {
-        this.setMessage(Component.translatable(titleKey, Math.round(this.getValue()*1000f)/10f));
+        this.setMessage(Component.translatable(titleKey, Math.round(this.getValue()*100f))); //TODO: put this somewhere else
     }
 
     @Override
