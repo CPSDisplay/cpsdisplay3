@@ -1,0 +1,12 @@
+#Don't forget to go outside, your love may be waiting for you <3
+text = "{0} {1}"
+showText = true
+shadow = true
+#Range: > -2147483648
+positionX = 50
+#Range: > -2147483648
+positionY = 50
+textColor = "ffffff"
+#Range: 0.1 ~ 4.0
+scale = 1
+rainbow = true

@@ -1,4 +1,4 @@
-package fr.dams4k.cpsdisplay.gui;
+package fr.dams4k.cpsdisplay.gui.components;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 
 import fr.dams4k.cpsdisplay.References;
 import fr.dams4k.cpsdisplay.config.Config;
+import fr.dams4k.cpsdisplay.gui.ConfigScreen;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -18,10 +19,12 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = References.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class DisplayComponent {
+public class ComponentsDisplayer {
     public static final int HITBOX_COLOR = 0xffffffff; // aarrggbb
 
     protected static final Minecraft mc = Minecraft.getInstance();
+
+    private final Component component;
     // Minecraft keys
     private static final KeyMapping KEY_ATTACK = mc.options.keyAttack;
     private static final KeyMapping KEY_USE = mc.options.keyUse;
@@ -36,40 +39,18 @@ public class DisplayComponent {
         if (mc.screen != null) {
             if (mc.screen.getTitle() == ConfigScreen.TITLE) return;
         }
-        DisplayComponent.render(guiGraphics);
+        renderComponents(guiGraphics);
     };
 
-    @SuppressWarnings("null")
-    public static void render(GuiGraphics guiGraphics) {
-        if (!Config.showText) return;
-
-        String text = getFormattedText();
-        String[] lines = text.split("\n");
-       
-
-        //- Render background
-        // guiGraphics.fill
-
-        //- Render text
-        for (int i = 0; i < lines.length; i++) {
-            String line = lines[i];
-            drawCenteredString(
-                guiGraphics, mc.font,
-                line, i,
-                Config.getTextColor(), Config.shadow
-            );
-        }
+    public ComponentsDisplayer(Component component) {
+        this.component = component;
     }
 
-    public static void drawCenteredString(GuiGraphics guiGraphics, @Nonnull Font font, @Nonnull String text, int line, int color, boolean shadow) {
-        guiGraphics.pose().pushPose();
-        guiGraphics.pose().scale(Config.scale, Config.scale, 1f); // Apply scale
-
-        float[] boundaries = getFBoundaries(font, text);
-        // We divide by Config.scale because positions will be scaled by pose().scale( ... )
-        guiGraphics.drawString(font, text, boundaries[0] / Config.scale, (boundaries[1] + boundaries[4] * line) / Config.scale, color, shadow);
-        
-        guiGraphics.pose().popPose();
+    public static void renderComponents(GuiGraphics guiGraphics) {
+        for (Component component : ComponentsManager.components) {
+            System.out.println("------------- DISPLAY");
+            component.render(guiGraphics);
+        }
     }
 
 
@@ -94,6 +75,7 @@ public class DisplayComponent {
         }
     }
 
+    //TODO: move this in a special class registering all the inputs
     public static Integer getAttackCPS() {
         long currentTime = System.currentTimeMillis();
         attackClicks.removeIf(e -> (e.longValue() + 1000l < currentTime));
@@ -107,7 +89,7 @@ public class DisplayComponent {
     }
 
     // [startX, startY, endX, endY, lineWidth]
-    public static int[] getIBoundaries(Font font, @Nonnull String text) {
+    public int[] getIBoundaries(Font font, @Nonnull String text) {
         float[] boundaries = getFBoundaries(font, text);
         return new int[]{
             (int) boundaries[0],
@@ -120,10 +102,10 @@ public class DisplayComponent {
 
 
     // [startX, startY, endX, endY, lineWidth]
-    public static float[] getFBoundaries(Font font, @Nonnull String text) {
+    public float[] getFBoundaries(Font font, @Nonnull String text) {
         int textWidth = font.width(longuestLine(text));
-        float x = Config.positionX - textWidth / 2;
-        float y = Config.positionY;
+        float x = component.config.positionX - textWidth * Config.scale / 2;
+        float y = component.config.positionY;
 
         int nb_lines = text.split("\n").length;
 
@@ -137,8 +119,8 @@ public class DisplayComponent {
     }
 
     @SuppressWarnings("null")
-    public static @Nonnull String getFormattedText() {
-        String text = Config.text;
+    public @Nonnull String getFormattedText() {
+        String text = component.config.text;
         text = text.replace("{0}", getAttackCPS().toString());
         text = text.replace("{1}", getUseCPS().toString());
         text = text.replace("&", "§");

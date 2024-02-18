@@ -2,6 +2,8 @@ package fr.dams4k.cpsdisplay.gui;
 
 import fr.dams4k.cpsdisplay.References;
 import fr.dams4k.cpsdisplay.config.Config;
+import fr.dams4k.cpsdisplay.gui.components.ComponentsManager;
+import fr.dams4k.cpsdisplay.gui.components.EditComponentDisplayer;
 import fr.dams4k.cpsdisplay.gui.components.SliderButton;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.GuiGraphics;
@@ -110,13 +112,13 @@ public class ConfigScreen extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        if (EditDisplayComponent.isOver(mouseX, mouseY) && mouseButton == 0) {
-            int diffX = Config.positionX - (int) mouseX;
-            int diffY = Config.positionY - (int) mouseY;
+        // if (DisplayManager.getEditDisplay().isOver(mouseX, mouseY) && mouseButton == 0) {
+        //     int diffX = Config.positionX - (int) mouseX;
+        //     int diffY = Config.positionY - (int) mouseY;
             
-            minecraft.setScreen(new MoveScreen(diffX, diffY));
-            return true;
-        }
+        //     minecraft.setScreen(new MoveScreen(diffX, diffY));
+        //     return true;
+        // }
         return super.mouseClicked(mouseX, mouseY, mouseButton);
     }
     
@@ -149,7 +151,6 @@ public class ConfigScreen extends Screen {
         }
         super.render(guiGraphics, p_281550_, p_282878_, p_282465_);
         
-
-        EditDisplayComponent.render(guiGraphics);
+        // DisplayManager.getEditDisplay().render(guiGraphics);
     }
 }
