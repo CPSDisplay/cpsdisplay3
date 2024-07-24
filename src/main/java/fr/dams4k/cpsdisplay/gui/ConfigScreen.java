@@ -34,6 +34,10 @@ public class ConfigScreen extends Screen {
 
     private static final Component DONE = Component.translatable("gui.done");
 
+    private static final Component NEW_COMPONENT = Component.translatable("cpsdisplay.config.addComponent");
+    private static final Component DELETE_COMPONENT = Component.translatable("cpsdisplay.config.deleteComponent");
+
+    // Components settings
     private MultiLineEditBox textEditBox;
 
     private CycleButton<Boolean> enableModCycle = CycleButton.booleanBuilder(ENABLED, DISABLED)
@@ -50,6 +54,15 @@ public class ConfigScreen extends Screen {
     private SliderButton sliderButton = new SliderButton(0, 0, 250, 20, "cpsdisplay.config.scale", 1, 0.5, 4);
     private EditBox textColorEditBox;
 
+    
+    // Component creation/destruction
+    private Button newComponentButton = Button.builder(NEW_COMPONENT, (btn) -> {
+        selectedComponent = MComponentsManager.createComponent();
+        setConfigValues();
+    }).width(120).build();
+    private Button deleteComponentButton = Button.builder(DELETE_COMPONENT, (btn) -> {
+
+    }).width(120).build();
 
     public MComponent selectedComponent = MComponentsManager.getLastSelected();
 
@@ -75,7 +88,7 @@ public class ConfigScreen extends Screen {
         GridLayout gridlayout = new GridLayout();
         gridlayout.defaultCellSetting().paddingHorizontal(5).paddingBottom(4).alignHorizontallyCenter();
         GridLayout.RowHelper gridlayout$rowhelper = gridlayout.createRowHelper(2);
-        
+
         Button doneButton = Button.builder(DONE, (btn) -> {
             onClose();
         }).build();
@@ -100,8 +113,19 @@ public class ConfigScreen extends Screen {
         gridlayout$rowhelper.addChild(doneButton, 2);
 
         gridlayout.arrangeElements();
-        FrameLayout.alignInRectangle(gridlayout, 0, this.height / 6 - 12, this.width, this.height, 0.5F, 0.0F);
+        FrameLayout.alignInRectangle(gridlayout, 0, 12, this.width, this.height, 0.5F, 0.0F);
         gridlayout.visitWidgets(this::addRenderableWidget);
+
+
+        GridLayout bottomGrid = new GridLayout();
+        bottomGrid.defaultCellSetting().paddingHorizontal(5).alignVerticallyBottom();
+        GridLayout.RowHelper bottomGrid$rowhelper = bottomGrid.createRowHelper(2);
+        bottomGrid$rowhelper.addChild(newComponentButton);
+        bottomGrid$rowhelper.addChild(deleteComponentButton);
+
+        bottomGrid.arrangeElements();
+        FrameLayout.alignInRectangle(bottomGrid, 0, 0, this.width, this.height, 0.5F, 1F);
+        bottomGrid.visitWidgets(this::addRenderableWidget);
     }
 
     public void setConfigValues() {

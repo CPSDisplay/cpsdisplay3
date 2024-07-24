@@ -17,6 +17,8 @@ import net.minecraftforge.fml.common.Mod;
 public class MComponentsManager {
 	public static HashMap<Integer, MComponent> components = new HashMap<>();
 
+	private static int biggestID = -1;
+
     public static void loadComponentConfigs() {
         Path componentsFolder = MComponentsManager.getComponentsFolder();
 		File[] files = componentsFolder.toFile().listFiles();
@@ -37,6 +39,10 @@ public class MComponentsManager {
 			
 			MComponent c = new MComponent(filepath);
 			components.put(c.id, c);
+			// If this id is the biggest, then we need to register it if we want to create a new component
+			if (c.id > biggestID) {
+				biggestID = c.id;
+			}
 		}
     }
 
@@ -53,6 +59,7 @@ public class MComponentsManager {
 			try {
 				Files.createDirectories(path);
 				// First launch of the mod, we create the first component
+				//TODO: when we call createComponent and components folder isn't created, 2 components will be created
 				MComponent firstComponent = new MComponent(path.resolve("0.toml").toString());
 				firstComponent.config.save();
 			} catch (IOException e) {
@@ -62,10 +69,12 @@ public class MComponentsManager {
 		return path;
 	}
 
-
-	// @SubscribeEvent
-    // public static void onLoad(final ModConfigEvent event) {
-	// 	System.out.println("On load");
-	// 	System.out.println(event.getConfig().getFileName());
-	// }
+	public static MComponent createComponent() {
+		Path path = getComponentsFolder();
+		biggestID++;
+		MComponent newComponent = new MComponent(path.resolve(biggestID + ".toml").toString());
+		newComponent.config.save();
+		components.put(biggestID, newComponent);
+		return newComponent;
+	}
 }
