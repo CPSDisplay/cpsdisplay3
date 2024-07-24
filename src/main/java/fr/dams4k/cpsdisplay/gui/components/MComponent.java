@@ -64,4 +64,13 @@ public class MComponent {
     public int[] getIBoundaries() {
         return config.getIBoundaries(mc.font, config.getText());
     }
+
+    public boolean isOver(double x, double y) {
+        float[] boundaries = getFBoundaries();
+
+        boolean correctX = x > boundaries[0] && boundaries[2] > x;
+        boolean correctY = y > boundaries[1] && boundaries[3] > y;
+
+        return correctX && correctY;
+    }
 }

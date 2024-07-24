@@ -35,6 +35,7 @@ public class MComponentsManager {
 				.map(File::getName).collect(Collectors.toSet());
 		
 		for (String filename : componentFiles) {
+			System.out.println(filename);
 			String filepath = getComponentsFolder().resolve(filename).toString();
 			components.add(new MComponent(filepath));
 		}

@@ -63,6 +63,13 @@ public class ConfigScreen extends Screen {
             return; //TODO: there is no component.. show it to the player
         }
 
+        // Must be created here, else the game crash
+        textEditBox = new MultiLineEditBox(
+            font, 0, 0, 250, 60,
+            TEXT_DEFAULT, title
+        );
+        textColorEditBox = new EditBox(font, 0, 0, 120, 20, title);
+
         setConfigValues();
 
         GridLayout gridlayout = new GridLayout();
@@ -98,15 +105,9 @@ public class ConfigScreen extends Screen {
     }
 
     public void setConfigValues() {
-        textEditBox = new MultiLineEditBox(
-            font, 0, 0, 250, 60,
-            TEXT_DEFAULT, title
-        );
         textEditBox.setValue(selectedComponent.config.text);
 
         sliderButton.setValue(selectedComponent.config.scale);
-
-        textColorEditBox = new EditBox(font, 0, 0, 120, 20, title);
         textColorEditBox.setValue(selectedComponent.config.textColor);
         textColorEditBox.setMaxLength(6);
 
@@ -124,7 +125,13 @@ public class ConfigScreen extends Screen {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
         for (MComponent component : MComponentsManager.components) {
-            // if (component.isO)
+            if (component.isOver(mouseX, mouseY)) {
+                // Then save previously selected component
+                selectedComponent.config.save();
+                // And change the selected component
+                selectedComponent = component;
+                setConfigValues();
+            }
         }
         // if (DisplayManager.getEditDisplay().isOver(mouseX, mouseY) && mouseButton == 0) {
         //     int diffX = Config.positionX - (int) mouseX;
@@ -154,6 +161,7 @@ public class ConfigScreen extends Screen {
                 correctCharacters = correctCharacters && "0123456789abcdef".indexOf(c) != -1;
             }
             if (correctCharacters) {
+                // Then update config value
                 selectedComponent.config.textColor = textColor;
             }
         } else if (textColor.length() == 0) {
