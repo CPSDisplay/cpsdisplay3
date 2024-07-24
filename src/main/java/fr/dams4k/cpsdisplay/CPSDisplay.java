@@ -1,6 +1,6 @@
 package fr.dams4k.cpsdisplay;
 
-import fr.dams4k.cpsdisplay.config.Config;
+import fr.dams4k.cpsdisplay.config.GlobalConfig;
 import fr.dams4k.cpsdisplay.gui.components.MComponentsManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -12,7 +12,8 @@ import net.minecraftforge.fml.config.ModConfig;
 @Mod(References.MOD_ID)
 public class CPSDisplay {
     public CPSDisplay() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.SPEC, "cpsdisplay.toml");
+        // ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.SPEC, "cpsdisplay.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, GlobalConfig.SPEC, GlobalConfig.getConfigFolder().resolve("global.toml").toString());
         MComponentsManager.loadComponentConfigs();
     }
 }

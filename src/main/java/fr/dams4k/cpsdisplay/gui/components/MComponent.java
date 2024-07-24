@@ -1,6 +1,8 @@
 package fr.dams4k.cpsdisplay.gui.components;
 
 import java.awt.Color;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 
@@ -13,8 +15,21 @@ public class MComponent {
 
     public final ComponentConfig config;
 
+    public final int id;
+
     public MComponent(String path) {
         this.config = new ComponentConfig(path);
+        
+
+        // i know regex is better but i can't get it working on java.. i don't understand why and i don't want to lose more time
+        System.out.println("CHECK HERE");
+        String[] s = path.split("/");
+        String filename = s[s.length-1];
+        System.out.println(filename);
+        String[] sf = filename.split("\\.");
+        String sID = sf[0];
+        System.out.println(sID);
+        id = Integer.parseInt(sID);
     }
 
     public void render(GuiGraphics guiGraphics) {

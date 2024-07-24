@@ -5,19 +5,20 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import fr.dams4k.cpsdisplay.References;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import fr.dams4k.cpsdisplay.config.GlobalConfig;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.fml.loading.FMLPaths;
 
 @Mod.EventBusSubscriber(modid = References.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MComponentsManager {
-	public static ArrayList<MComponent> components = new ArrayList<>();
+	// public static ArrayList<MComponent> components = new ArrayList<>();
+
+	public static HashMap<Integer, MComponent> components = new HashMap<>();
 
     public static void loadComponentConfigs() {
         Path componentsFolder = MComponentsManager.getComponentsFolder();
@@ -35,35 +36,22 @@ public class MComponentsManager {
 				.map(File::getName).collect(Collectors.toSet());
 		
 		for (String filename : componentFiles) {
-			System.out.println(filename);
 			String filepath = getComponentsFolder().resolve(filename).toString();
-			components.add(new MComponent(filepath));
+			
+			MComponent c = new MComponent(filepath);
+			components.put(c.id, c);
 		}
     }
 
-	public static MComponent getFirstComponent() {
-		if (components.size() == 0) {
+	public static MComponent getLastSelected() {
+		if (components.size() < GlobalConfig.getLastSelectedID()) {
 			return null;
 		}
-		return components.get(0);
-	}
-
-    public static Path getConfigFolder() {
-        Path path = FMLPaths.CONFIGDIR.get().resolve(References.MOD_ID);
-		
-        // Create folders if needed
-		if (!path.toFile().exists()) {
-			try {
-				Files.createDirectories(path);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return path;
+		return components.get(GlobalConfig.getLastSelectedID());
 	}
 
     public static Path getComponentsFolder() {
-		Path path = getConfigFolder().resolve("components");
+		Path path = GlobalConfig.getConfigFolder().resolve("components");
 		if (!path.toFile().exists()) {
 			try {
 				Files.createDirectories(path);
@@ -78,9 +66,9 @@ public class MComponentsManager {
 	}
 
 
-	@SubscribeEvent
-    public static void onLoad(final ModConfigEvent event) {
-		System.out.println("On load");
-		System.out.println(event.getConfig().getFileName());
-	}
+	// @SubscribeEvent
+    // public static void onLoad(final ModConfigEvent event) {
+	// 	System.out.println("On load");
+	// 	System.out.println(event.getConfig().getFileName());
+	// }
 }

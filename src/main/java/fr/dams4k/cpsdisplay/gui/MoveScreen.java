@@ -1,6 +1,5 @@
 package fr.dams4k.cpsdisplay.gui;
 
-import fr.dams4k.cpsdisplay.config.Config;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -22,8 +21,8 @@ public class MoveScreen extends Screen {
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
         int newX = diffX + mouseX;
         int newY = diffY + mouseY;
-        Config.positionX = newX;
-        Config.positionY = newY;
+        // Config.positionX = newX;
+        // Config.positionY = newY;
     }
 
     @Override

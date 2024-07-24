@@ -1,6 +1,7 @@
 package fr.dams4k.cpsdisplay.gui;
 
 import fr.dams4k.cpsdisplay.References;
+import fr.dams4k.cpsdisplay.config.GlobalConfig;
 import fr.dams4k.cpsdisplay.gui.components.MComponent;
 import fr.dams4k.cpsdisplay.gui.components.MComponentsManager;
 import fr.dams4k.cpsdisplay.gui.components.SliderButton;
@@ -51,7 +52,7 @@ public class ConfigScreen extends Screen {
     private EditBox textColorEditBox;
 
 
-    public MComponent selectedComponent = MComponentsManager.getFirstComponent();
+    public MComponent selectedComponent = MComponentsManager.getLastSelected();
 
     public ConfigScreen() {
         super(TITLE);
@@ -124,12 +125,13 @@ public class ConfigScreen extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        for (MComponent component : MComponentsManager.components) {
+        for (MComponent component : MComponentsManager.components.values()) {
             if (component.isOver(mouseX, mouseY)) {
                 // Then save previously selected component
                 selectedComponent.config.save();
                 // And change the selected component
                 selectedComponent = component;
+                GlobalConfig.setLastSelectedID(component.id);
                 setConfigValues();
             }
         }
@@ -177,7 +179,7 @@ public class ConfigScreen extends Screen {
         
         
         // Display all components
-        for (MComponent component : MComponentsManager.components) {
+        for (MComponent component : MComponentsManager.components.values()) {
             component.render(guiGraphics);
         }
 

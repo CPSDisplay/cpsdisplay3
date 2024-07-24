@@ -6,11 +6,9 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import fr.dams4k.cpsdisplay.References;
-import fr.dams4k.cpsdisplay.config.Config;
 import fr.dams4k.cpsdisplay.gui.ConfigScreen;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
@@ -43,7 +41,7 @@ public class ComponentsDisplayer {
     };
 
     public static void renderComponents(GuiGraphics guiGraphics) {
-        for (MComponent component : MComponentsManager.components) {
+        for (MComponent component : MComponentsManager.components.values()) {
             component.render(guiGraphics);
         }
     }
