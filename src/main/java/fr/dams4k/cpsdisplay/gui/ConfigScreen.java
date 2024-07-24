@@ -3,6 +3,7 @@ package fr.dams4k.cpsdisplay.gui;
 import fr.dams4k.cpsdisplay.References;
 import fr.dams4k.cpsdisplay.config.Config;
 import fr.dams4k.cpsdisplay.gui.components.MComponentsManager;
+import fr.dams4k.cpsdisplay.gui.components.EditComponentDisplayer;
 import fr.dams4k.cpsdisplay.gui.components.MComponent;
 import fr.dams4k.cpsdisplay.gui.components.SliderButton;
 import net.minecraft.SharedConstants;
@@ -123,6 +124,9 @@ public class ConfigScreen extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+        for (MComponent component : MComponentsManager.components) {
+            // if (component.isO)
+        }
         // if (DisplayManager.getEditDisplay().isOver(mouseX, mouseY) && mouseButton == 0) {
         //     int diffX = Config.positionX - (int) mouseX;
         //     int diffY = Config.positionY - (int) mouseY;
@@ -167,9 +171,10 @@ public class ConfigScreen extends Screen {
         
         // Display all components
         //TODO: Yellow border for the selected component
-        for (MComponent component : MComponentsManager.components) {
-            System.out.println("------------- DISPLAY");
-            component.render(guiGraphics);
-        }
+        EditComponentDisplayer.renderComponents(guiGraphics);
+        // for (MComponent component : MComponentsManager.components) {
+        //     System.out.println("------------- DISPLAY");
+        //     component.render(guiGraphics);
+        // }
     }
 }

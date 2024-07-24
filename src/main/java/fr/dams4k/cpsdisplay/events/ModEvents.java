@@ -121,7 +121,7 @@ public class ModEvents {
 
         @SubscribeEvent
         public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
-            MComponentsManager.registerAllOverlays(event);
+            // MComponentsManager.registerAllOverlays(event);
             event.registerAboveAll("cpsdisplay", ComponentsDisplayer.OVERLAY);
         }
     }

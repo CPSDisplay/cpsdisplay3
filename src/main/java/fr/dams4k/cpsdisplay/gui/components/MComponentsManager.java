@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import fr.dams4k.cpsdisplay.References;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
@@ -19,8 +18,6 @@ import net.minecraftforge.fml.loading.FMLPaths;
 @Mod.EventBusSubscriber(modid = References.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MComponentsManager {
 	public static ArrayList<MComponent> components = new ArrayList<>();
-
-    private static ArrayList<MComponent> displays = new ArrayList<>();
 
     public static void loadComponentConfigs() {
         Path componentsFolder = MComponentsManager.getComponentsFolder();
@@ -85,10 +82,4 @@ public class MComponentsManager {
 		System.out.println("On load");
 		System.out.println(event.getConfig().getFileName());
 	}
-
-    public static void registerAllOverlays(RegisterGuiOverlaysEvent event) {
-        for (int i = 0; i < displays.size(); i++) {
-            event.registerAboveAll("cpsdisplay_" + i, new ComponentsDisplayer(displays.get(i)).OVERLAY);
-        }
-    }
 }

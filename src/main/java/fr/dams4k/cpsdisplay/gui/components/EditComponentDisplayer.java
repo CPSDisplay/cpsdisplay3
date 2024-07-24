@@ -19,7 +19,7 @@ public class EditComponentDisplayer extends ComponentsDisplayer {
     }
 
     public static void renderComponents(GuiGraphics guiGraphics) {
-        // ComponentsDisplayer.renderComponents(guiGraphics);
+        ComponentsDisplayer.renderComponents(guiGraphics);
 
         // String text = getFormattedText();
         
