@@ -17,7 +17,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = References.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class ComponentsDisplayer {
+public class MComponentsDisplayer {
     public static final int HITBOX_COLOR = 0xffffffff; // aarrggbb
 
     protected static final Minecraft mc = Minecraft.getInstance();

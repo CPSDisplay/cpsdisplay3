@@ -10,7 +10,7 @@ import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import net.minecraft.client.gui.Font;
 
 
-public class ComponentConfig {
+public class MComponentConfig {
     private final CommentedFileConfig config;
 
     public boolean showText = true;
@@ -28,7 +28,7 @@ public class ComponentConfig {
     public boolean loaded = false;
 
 
-    public ComponentConfig(String path) {
+    public MComponentConfig(String path) {
         File file = new File(path);
         this.config = CommentedFileConfig.builder(file).build();
         
@@ -80,8 +80,8 @@ public class ComponentConfig {
 
     public String getText() {
         return this.text
-            .replace("{0}", ComponentsDisplayer.getAttackCPS().toString())
-            .replace("{1}", ComponentsDisplayer.getUseCPS().toString())
+            .replace("{0}", MComponentsDisplayer.getAttackCPS().toString())
+            .replace("{1}", MComponentsDisplayer.getUseCPS().toString())
             .replace("&", "§");
     }
 

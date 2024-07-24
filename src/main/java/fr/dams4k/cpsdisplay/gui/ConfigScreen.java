@@ -34,8 +34,6 @@ public class ConfigScreen extends Screen {
 
     private static final Component DONE = Component.translatable("gui.done");
 
-    // private static final Component SCALE = Component.translatable("cpsdisplay.config.scale");
-
     private MultiLineEditBox textEditBox;
 
     private CycleButton<Boolean> enableModCycle = CycleButton.booleanBuilder(ENABLED, DISABLED)
@@ -127,22 +125,24 @@ public class ConfigScreen extends Screen {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
         for (MComponent component : MComponentsManager.components.values()) {
-            if (component.isOver(mouseX, mouseY)) {
+            if (component.isOver(mouseX, mouseY) && mouseButton == 0) {
                 // Then save previously selected component
                 selectedComponent.config.save();
                 // And change the selected component
                 selectedComponent = component;
                 GlobalConfig.setLastSelectedID(component.id);
                 setConfigValues();
+
+                // And display the moving screen
+                //TODO: find a way to change the screen only if we have dragged to component? Or thing about something else..
+                int diffX = component.config.positionX - (int) mouseX;
+                int diffY = component.config.positionY - (int) mouseY;
+                
+                minecraft.setScreen(new MoveScreen(diffX, diffY));
+
+                return true;
             }
         }
-        // if (DisplayManager.getEditDisplay().isOver(mouseX, mouseY) && mouseButton == 0) {
-        //     int diffX = Config.positionX - (int) mouseX;
-        //     int diffY = Config.positionY - (int) mouseY;
-            
-        //     minecraft.setScreen(new MoveScreen(diffX, diffY));
-        //     return true;
-        // }
         
         //TODO: when component clicked, change selected component and save previous component
         return super.mouseClicked(mouseX, mouseY, mouseButton);

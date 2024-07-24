@@ -13,12 +13,12 @@ import net.minecraft.client.gui.GuiGraphics;
 public class MComponent {
     protected static final Minecraft mc = Minecraft.getInstance();
 
-    public final ComponentConfig config;
+    public final MComponentConfig config;
 
     public final int id;
 
     public MComponent(String path) {
-        this.config = new ComponentConfig(path);
+        this.config = new MComponentConfig(path);
         
 
         // i know regex is better but i can't get it working on java.. i don't understand why and i don't want to lose more time
