@@ -14,6 +14,8 @@ public class MoveScreen extends Screen {
 
     public static final Component TITLE = Component.translatable("cpsdisplay.screen.move");
 
+    private MComponent component = MComponentsManager.getLastSelected();
+
     protected MoveScreen(int diffX, int diffY) {
         super(TITLE);
 
@@ -25,13 +27,13 @@ public class MoveScreen extends Screen {
     public void render(@Nonnull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
         int newX = diffX + mouseX;
         int newY = diffY + mouseY;
-        MComponent component = MComponentsManager.getLastSelected();
         component.config.positionX = newX;
         component.config.positionY = newY;
     }
 
     @Override
     public boolean mouseReleased(double p_94722_, double p_94723_, int p_94724_) {
+        component.config.save();
         minecraft.setScreen(new ConfigScreen());
 
         return super.mouseReleased(p_94722_, p_94723_, p_94724_);
