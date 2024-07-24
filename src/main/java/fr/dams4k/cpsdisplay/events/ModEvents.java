@@ -15,7 +15,7 @@ import fr.dams4k.cpsdisplay.References.ReleaseType;
 import fr.dams4k.cpsdisplay.VersionChecker;
 import fr.dams4k.cpsdisplay.gui.ConfigScreen;
 import fr.dams4k.cpsdisplay.gui.components.ComponentsDisplayer;
-import fr.dams4k.cpsdisplay.gui.components.ComponentsManager;
+import fr.dams4k.cpsdisplay.gui.components.MComponentsManager;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.ClickEvent;
@@ -121,7 +121,7 @@ public class ModEvents {
 
         @SubscribeEvent
         public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
-            ComponentsManager.registerAllOverlays(event);
+            MComponentsManager.registerAllOverlays(event);
             event.registerAboveAll("cpsdisplay", ComponentsDisplayer.OVERLAY);
         }
     }

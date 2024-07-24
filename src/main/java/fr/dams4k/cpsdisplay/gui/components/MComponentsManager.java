@@ -17,13 +17,13 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 @Mod.EventBusSubscriber(modid = References.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class ComponentsManager {
-	public static ArrayList<Component> components = new ArrayList<>();
+public class MComponentsManager {
+	public static ArrayList<MComponent> components = new ArrayList<>();
 
-    private static ArrayList<Component> displays = new ArrayList<>();
+    private static ArrayList<MComponent> displays = new ArrayList<>();
 
     public static void loadComponentConfigs() {
-        Path componentsFolder = ComponentsManager.getComponentsFolder();
+        Path componentsFolder = MComponentsManager.getComponentsFolder();
 		File[] files = componentsFolder.toFile().listFiles();
 
 		if (files == null) return;
@@ -39,9 +39,16 @@ public class ComponentsManager {
 		
 		for (String filename : componentFiles) {
 			String filepath = getComponentsFolder().resolve(filename).toString();
-			components.add(new Component(filepath));
+			components.add(new MComponent(filepath));
 		}
     }
+
+	public static MComponent getFirstComponent() {
+		if (components.size() == 0) {
+			return null;
+		}
+		return components.get(0);
+	}
 
     public static Path getConfigFolder() {
         Path path = FMLPaths.CONFIGDIR.get().resolve(References.MOD_ID);
@@ -63,7 +70,7 @@ public class ComponentsManager {
 			try {
 				Files.createDirectories(path);
 				// First launch of the mod, we create the first component
-				Component firstComponent = new Component(path.resolve("0.toml").toString());
+				MComponent firstComponent = new MComponent(path.resolve("0.toml").toString());
 				firstComponent.config.save();
 			} catch (IOException e) {
 				e.printStackTrace();

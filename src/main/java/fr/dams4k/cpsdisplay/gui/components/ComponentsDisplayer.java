@@ -24,7 +24,7 @@ public class ComponentsDisplayer {
 
     protected static final Minecraft mc = Minecraft.getInstance();
 
-    private final Component component;
+    private final MComponent component;
     // Minecraft keys
     private static final KeyMapping KEY_ATTACK = mc.options.keyAttack;
     private static final KeyMapping KEY_USE = mc.options.keyUse;
@@ -42,12 +42,12 @@ public class ComponentsDisplayer {
         renderComponents(guiGraphics);
     };
 
-    public ComponentsDisplayer(Component component) {
+    public ComponentsDisplayer(MComponent component) {
         this.component = component;
     }
 
     public static void renderComponents(GuiGraphics guiGraphics) {
-        for (Component component : ComponentsManager.components) {
+        for (MComponent component : MComponentsManager.components) {
             System.out.println("------------- DISPLAY");
             component.render(guiGraphics);
         }
@@ -118,7 +118,6 @@ public class ComponentsDisplayer {
         };
     }
 
-    @SuppressWarnings("null")
     public @Nonnull String getFormattedText() {
         String text = component.config.text;
         text = text.replace("{0}", getAttackCPS().toString());
@@ -127,7 +126,6 @@ public class ComponentsDisplayer {
         return text;
     }
 
-    @SuppressWarnings("null")
     public static @Nonnull String longuestLine(@Nonnull String text) {
         int maxLength = 0;
         int idx = 0;

@@ -5,7 +5,7 @@ import javax.annotation.Nonnull;
 import net.minecraft.client.gui.GuiGraphics;
 
 public class EditComponentDisplayer extends ComponentsDisplayer {
-    public EditComponentDisplayer(Component config) {
+    public EditComponentDisplayer(MComponent config) {
         super(config);
     }
 

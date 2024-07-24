@@ -2,8 +2,8 @@ package fr.dams4k.cpsdisplay.gui;
 
 import fr.dams4k.cpsdisplay.References;
 import fr.dams4k.cpsdisplay.config.Config;
-import fr.dams4k.cpsdisplay.gui.components.ComponentsManager;
-import fr.dams4k.cpsdisplay.gui.components.EditComponentDisplayer;
+import fr.dams4k.cpsdisplay.gui.components.MComponentsManager;
+import fr.dams4k.cpsdisplay.gui.components.MComponent;
 import fr.dams4k.cpsdisplay.gui.components.SliderButton;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.GuiGraphics;
@@ -19,6 +19,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 public class ConfigScreen extends Screen {
+    
     public static final Component TITLE = Component.translatable("cpsdisplay.config.title");
 
     private static final Component ENABLED = Component.translatable("cpsdisplay.config.enabled");
@@ -50,27 +51,19 @@ public class ConfigScreen extends Screen {
     private EditBox textColorEditBox;
 
 
+    public MComponent selectedComponent = MComponentsManager.getFirstComponent();
+
     public ConfigScreen() {
         super(TITLE);
     }
 
     @Override
     protected void init() {
-        textEditBox = new MultiLineEditBox(
-            font, 0, 0, 250, 60,
-            TEXT_DEFAULT, title
-        );
-        textEditBox.setValue(Config.text);
+        if (selectedComponent == null) {
+            return; //TODO: there is no component.. show it to the player
+        }
 
-        sliderButton.setValue(Config.scale);
-
-        textColorEditBox = new EditBox(font, 0, 0, 120, 20, title);
-        textColorEditBox.setValue(Config.textColor);
-        textColorEditBox.setMaxLength(6);
-
-        shadowCycle.setValue(Config.shadow);
-        rainbowCycle.setValue(Config.rainbow);
-        enableModCycle.setValue(Config.showText);
+        setConfigValues();
 
         GridLayout gridlayout = new GridLayout();
         gridlayout.defaultCellSetting().paddingHorizontal(5).paddingBottom(4).alignHorizontallyCenter();
@@ -104,9 +97,27 @@ public class ConfigScreen extends Screen {
         gridlayout.visitWidgets(this::addRenderableWidget);
     }
 
+    public void setConfigValues() {
+        textEditBox = new MultiLineEditBox(
+            font, 0, 0, 250, 60,
+            TEXT_DEFAULT, title
+        );
+        textEditBox.setValue(selectedComponent.config.text);
+
+        sliderButton.setValue(selectedComponent.config.scale);
+
+        textColorEditBox = new EditBox(font, 0, 0, 120, 20, title);
+        textColorEditBox.setValue(selectedComponent.config.textColor);
+        textColorEditBox.setMaxLength(6);
+
+        shadowCycle.setValue(selectedComponent.config.shadow);
+        rainbowCycle.setValue(selectedComponent.config.rainbow);
+        enableModCycle.setValue(selectedComponent.config.showText);
+    }
+
     @Override
     public void onClose() {
-        Config.save();
+        selectedComponent.config.save();
         super.onClose();
     }
 
@@ -119,17 +130,19 @@ public class ConfigScreen extends Screen {
         //     minecraft.setScreen(new MoveScreen(diffX, diffY));
         //     return true;
         // }
+        
+        //TODO: when component clicked, change selected component and save previous component
         return super.mouseClicked(mouseX, mouseY, mouseButton);
     }
     
     @Override
     public void render(GuiGraphics guiGraphics, int p_281550_, int p_282878_, float p_282465_) {
-        Config.text = textEditBox.getValue();
-        Config.shadow = shadowCycle.getValue();
-        Config.showText = enableModCycle.getValue();
-        Config.rainbow = rainbowCycle.getValue();
+        selectedComponent.config.text = textEditBox.getValue();
+        selectedComponent.config.shadow = shadowCycle.getValue();
+        selectedComponent.config.showText = enableModCycle.getValue();
+        selectedComponent.config.rainbow = rainbowCycle.getValue();
 
-        Config.scale = (float) sliderButton.getValue();
+        selectedComponent.config.scale = (float) sliderButton.getValue();
         
         String textColor = textColorEditBox.getValue().toLowerCase();
         if (textColor.length() == 6) {
@@ -138,7 +151,7 @@ public class ConfigScreen extends Screen {
                 correctCharacters = correctCharacters && "0123456789abcdef".indexOf(c) != -1;
             }
             if (correctCharacters) {
-                Config.textColor = textColor;
+                selectedComponent.config.textColor = textColor;
             }
         } else if (textColor.length() == 0) {
             textColorEditBox.setSuggestion("ffffff");
@@ -151,6 +164,12 @@ public class ConfigScreen extends Screen {
         }
         super.render(guiGraphics, p_281550_, p_282878_, p_282465_);
         
-        // DisplayManager.getEditDisplay().render(guiGraphics);
+        
+        // Display all components
+        //TODO: Yellow border for the selected component
+        for (MComponent component : MComponentsManager.components) {
+            System.out.println("------------- DISPLAY");
+            component.render(guiGraphics);
+        }
     }
 }

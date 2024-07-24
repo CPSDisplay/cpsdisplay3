@@ -4,17 +4,16 @@ import java.awt.Color;
 
 import javax.annotation.Nonnull;
 
-import fr.dams4k.cpsdisplay.config.Config;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 
-public class Component {
+public class MComponent {
     protected static final Minecraft mc = Minecraft.getInstance();
 
     public final ComponentConfig config;
 
-    public Component(String path) {
+    public MComponent(String path) {
         this.config = new ComponentConfig(path);
     }
 
