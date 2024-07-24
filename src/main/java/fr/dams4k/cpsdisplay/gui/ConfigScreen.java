@@ -20,6 +20,7 @@ import net.minecraft.network.chat.Component;
 
 public class ConfigScreen extends Screen {
     public static final int SELECTED_COLOR = 0xffffff00; //aarrggbb - Color is YELLOW
+    public static final int SELECTABLE_COLOR = 0xff868686;
 
     public static final Component TITLE = Component.translatable("cpsdisplay.config.title");
 
@@ -178,11 +179,24 @@ public class ConfigScreen extends Screen {
         super.render(guiGraphics, p_281550_, p_282878_, p_282465_);
         
         
+
+
+
         // Display all components
         for (MComponent component : MComponentsManager.components.values()) {
             component.render(guiGraphics);
+            // Draw gray border if you can select the component
+            // This is usefull to see were are disabled components
+            if (component.id != selectedComponent.id) {
+                int[] boundaries = component.getIBoundaries();
+                guiGraphics.hLine(boundaries[0], boundaries[2], boundaries[1], SELECTABLE_COLOR);
+                guiGraphics.hLine(boundaries[0], boundaries[2], boundaries[3], SELECTABLE_COLOR);
+                guiGraphics.vLine(boundaries[0], boundaries[1], boundaries[3], SELECTABLE_COLOR);
+                guiGraphics.vLine(boundaries[2], boundaries[1], boundaries[3], SELECTABLE_COLOR);
+            }
         }
 
+        // Draw yellow border for the selected component
         int[] boundaries = selectedComponent.getIBoundaries();
         guiGraphics.hLine(boundaries[0], boundaries[2], boundaries[1], SELECTED_COLOR);
         guiGraphics.hLine(boundaries[0], boundaries[2], boundaries[3], SELECTED_COLOR);
