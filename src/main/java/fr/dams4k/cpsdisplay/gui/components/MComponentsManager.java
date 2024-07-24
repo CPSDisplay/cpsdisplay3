@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,8 +15,6 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = References.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MComponentsManager {
-	// public static ArrayList<MComponent> components = new ArrayList<>();
-
 	public static HashMap<Integer, MComponent> components = new HashMap<>();
 
     public static void loadComponentConfigs() {
