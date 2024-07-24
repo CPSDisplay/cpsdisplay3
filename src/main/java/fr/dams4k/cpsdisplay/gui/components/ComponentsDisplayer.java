@@ -24,7 +24,7 @@ public class ComponentsDisplayer {
 
     protected static final Minecraft mc = Minecraft.getInstance();
 
-    private final MComponent component;
+    // private final MComponent component;
     // Minecraft keys
     private static final KeyMapping KEY_ATTACK = mc.options.keyAttack;
     private static final KeyMapping KEY_USE = mc.options.keyUse;
@@ -42,17 +42,11 @@ public class ComponentsDisplayer {
         renderComponents(guiGraphics);
     };
 
-    public ComponentsDisplayer(MComponent component) {
-        this.component = component;
-    }
-
     public static void renderComponents(GuiGraphics guiGraphics) {
         for (MComponent component : MComponentsManager.components) {
-            System.out.println("------------- DISPLAY");
             component.render(guiGraphics);
         }
     }
-
 
     @SubscribeEvent
     public static void onInput(InputEvent event) {
@@ -86,44 +80,6 @@ public class ComponentsDisplayer {
         long currentTime = System.currentTimeMillis();
         useClicks.removeIf(e -> (e.longValue() + 1000l < currentTime));
         return useClicks.size();
-    }
-
-    // [startX, startY, endX, endY, lineWidth]
-    public int[] getIBoundaries(Font font, @Nonnull String text) {
-        float[] boundaries = getFBoundaries(font, text);
-        return new int[]{
-            (int) boundaries[0],
-            (int) boundaries[1],
-            (int) boundaries[2],
-            (int) boundaries[3],
-            (int) boundaries[4]
-        };
-    }
-
-
-    // [startX, startY, endX, endY, lineWidth]
-    public float[] getFBoundaries(Font font, @Nonnull String text) {
-        int textWidth = font.width(longuestLine(text));
-        float x = component.config.positionX - textWidth * Config.scale / 2;
-        float y = component.config.positionY;
-
-        int nb_lines = text.split("\n").length;
-
-        return new float[]{
-            x,
-            y,
-            x + textWidth * Config.scale,
-            y + font.lineHeight * nb_lines * Config.scale,
-            mc.font.lineHeight * Config.scale
-        };
-    }
-
-    public @Nonnull String getFormattedText() {
-        String text = component.config.text;
-        text = text.replace("{0}", getAttackCPS().toString());
-        text = text.replace("{1}", getUseCPS().toString());
-        text = text.replace("&", "§");
-        return text;
     }
 
     public static @Nonnull String longuestLine(@Nonnull String text) {

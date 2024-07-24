@@ -1,10 +1,8 @@
 package fr.dams4k.cpsdisplay.gui;
 
 import fr.dams4k.cpsdisplay.References;
-import fr.dams4k.cpsdisplay.config.Config;
-import fr.dams4k.cpsdisplay.gui.components.MComponentsManager;
-import fr.dams4k.cpsdisplay.gui.components.EditComponentDisplayer;
 import fr.dams4k.cpsdisplay.gui.components.MComponent;
+import fr.dams4k.cpsdisplay.gui.components.MComponentsManager;
 import fr.dams4k.cpsdisplay.gui.components.SliderButton;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.GuiGraphics;
@@ -171,7 +169,6 @@ public class ConfigScreen extends Screen {
         
         // Display all components
         //TODO: Yellow border for the selected component
-        EditComponentDisplayer.renderComponents(guiGraphics);
         // for (MComponent component : MComponentsManager.components) {
         //     System.out.println("------------- DISPLAY");
         //     component.render(guiGraphics);
