@@ -18,7 +18,8 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 public class ConfigScreen extends Screen {
-    
+    public static final int SELECTED_COLOR = 0xffffff00; //aarrggbb - Color is YELLOW
+
     public static final Component TITLE = Component.translatable("cpsdisplay.config.title");
 
     private static final Component ENABLED = Component.translatable("cpsdisplay.config.enabled");
@@ -168,10 +169,14 @@ public class ConfigScreen extends Screen {
         
         
         // Display all components
-        //TODO: Yellow border for the selected component
-        // for (MComponent component : MComponentsManager.components) {
-        //     System.out.println("------------- DISPLAY");
-        //     component.render(guiGraphics);
-        // }
+        for (MComponent component : MComponentsManager.components) {
+            component.render(guiGraphics);
+        }
+
+        int[] boundaries = selectedComponent.getIBoundaries();
+        guiGraphics.hLine(boundaries[0], boundaries[2], boundaries[1], SELECTED_COLOR);
+        guiGraphics.hLine(boundaries[0], boundaries[2], boundaries[3], SELECTED_COLOR);
+        guiGraphics.vLine(boundaries[0], boundaries[1], boundaries[3], SELECTED_COLOR);
+        guiGraphics.vLine(boundaries[2], boundaries[1], boundaries[3], SELECTED_COLOR);
     }
 }

@@ -56,4 +56,12 @@ public class MComponent {
             return Color.HSBtoRGB((float) (System.currentTimeMillis() * 0.01 % 100l)/ 100f, 0.8f, 0.8f);
         }
     }
+
+    public float[] getFBoundaries() {
+        return config.getFBoundaries(mc.font, config.getText()); //TODO: investigate why i don't directly use config.getText() in config.getFBoundaries()
+    }
+
+    public int[] getIBoundaries() {
+        return config.getIBoundaries(mc.font, config.getText());
+    }
 }
