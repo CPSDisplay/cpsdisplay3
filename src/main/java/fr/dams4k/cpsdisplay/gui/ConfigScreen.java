@@ -66,7 +66,7 @@ public class ConfigScreen extends Screen {
         selectedComponent = MComponentsManager.createComponent();
         setConfigValues();
         minecraft.setScreen(new ConfigScreen());
-    }).width(200).build();
+    }).width(160).build();
     private Button deleteComponentButton = Button.builder(DELETE_COMPONENT, (btn) -> {
         selectedComponent.delete();
         selectedComponent = MComponentsManager.getFirstComponent();
