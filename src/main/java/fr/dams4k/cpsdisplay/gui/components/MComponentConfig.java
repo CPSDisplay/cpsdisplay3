@@ -12,6 +12,7 @@ import net.minecraft.client.gui.Font;
 
 public class MComponentConfig {
     private final CommentedFileConfig config;
+    private final File file;
 
     public boolean showText = true;
     public String text = "[{0} | {1}] CPS";
@@ -29,7 +30,7 @@ public class MComponentConfig {
 
 
     public MComponentConfig(String path) {
-        File file = new File(path);
+        file = new File(path);
         this.config = CommentedFileConfig.builder(file).build();
         
         if (file.exists()) {
@@ -137,5 +138,10 @@ public class MComponentConfig {
             y + font.lineHeight * nb_lines * scale,
             font.lineHeight * scale
         };
+    }
+
+    public void delete() {
+        config.close();
+        file.delete();
     }
 }

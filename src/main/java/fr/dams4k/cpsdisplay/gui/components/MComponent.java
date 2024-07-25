@@ -1,8 +1,6 @@
 package fr.dams4k.cpsdisplay.gui.components;
 
 import java.awt.Color;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 
@@ -87,5 +85,10 @@ public class MComponent {
         boolean correctY = y > boundaries[1] && boundaries[3] > y;
 
         return correctX && correctY;
+    }
+
+    public void delete() {
+        MComponentsManager.components.remove(id);
+        config.delete();
     }
 }

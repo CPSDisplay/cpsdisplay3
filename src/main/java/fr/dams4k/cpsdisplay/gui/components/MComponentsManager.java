@@ -47,10 +47,10 @@ public class MComponentsManager {
     }
 
 	public static MComponent getLastSelected() {
-		if (components.size() < GlobalConfig.getLastSelectedID()) {
-			return null;
-		}
-		return components.get(GlobalConfig.getLastSelectedID());
+		return components.getOrDefault(GlobalConfig.getLastSelectedID(), null);
+	}
+	public static MComponent getLastSelectedOrFirst() {
+		return components.getOrDefault(GlobalConfig.getLastSelectedID(), getFirstComponent());
 	}
 
     public static Path getComponentsFolder() {
@@ -76,5 +76,10 @@ public class MComponentsManager {
 		newComponent.config.save();
 		components.put(biggestID, newComponent);
 		return newComponent;
+	}
+
+	public static MComponent getFirstComponent() {
+		if (components.size() == 0) return null;
+		return components.values().iterator().next();
 	}
 }

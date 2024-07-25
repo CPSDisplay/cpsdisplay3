@@ -11,6 +11,7 @@
     "cpsdisplay.version.description": " §7A new version is ",
     "cpsdisplay.version.url": "§3§navailable",
     "cpsdisplay.config.scale": "Scale: %s%%",
-    "cpsdisplay.config.addComponent": "Add",
-    "cpsdisplay.config.deleteComponent": "Delete"
+    "cpsdisplay.config.addComponent": "New component",
+    "cpsdisplay.config.deleteComponent": "Delete",
+    "cpsdisplay.config.label.textColor": "Text color :"
 }

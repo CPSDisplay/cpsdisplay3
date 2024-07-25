@@ -25,6 +25,10 @@ public class MoveScreen extends Screen {
     
     @Override
     public void render(@Nonnull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+        if (component == null) {
+            minecraft.setScreen(new ConfigScreen());
+            return;
+        }
         int newX = diffX + mouseX;
         int newY = diffY + mouseY;
         component.config.positionX = newX;

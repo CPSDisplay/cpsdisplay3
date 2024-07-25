@@ -27,6 +27,11 @@ public class ConfigScreen extends Screen {
     private static final Component ENABLED = Component.translatable("cpsdisplay.config.enabled");
     private static final Component DISABLED = Component.translatable("cpsdisplay.config.disabled");
 
+    private static final Component DELETE_COMPONENT = Component.translatable("cpsdisplay.config.deleteComponent");
+
+
+    private static final Component TEXT_COLOR_LABEL = Component.translatable("cpsdisplay.config.label.textColor");
+
     private static final Component TEXT_DEFAULT = Component.translatable("cpsdisplay.config.defaultText");
 
     private static final Component SHADOW = Component.translatable("cpsdisplay.config.showShadow");
@@ -35,14 +40,13 @@ public class ConfigScreen extends Screen {
     private static final Component DONE = Component.translatable("gui.done");
 
     private static final Component NEW_COMPONENT = Component.translatable("cpsdisplay.config.addComponent");
-    private static final Component DELETE_COMPONENT = Component.translatable("cpsdisplay.config.deleteComponent");
 
     // Components settings
     private MultiLineEditBox textEditBox;
 
     private CycleButton<Boolean> enableModCycle = CycleButton.booleanBuilder(ENABLED, DISABLED)
             .displayOnlyValue()
-            .create(0, 0, 250, 20, null);
+            .create(0, 0, 120, 20, null);
         
     private CycleButton<Boolean> shadowCycle = CycleButton.booleanBuilder(ENABLED, DISABLED)
             .create(0, 0, 120, 20, SHADOW);
@@ -55,16 +59,19 @@ public class ConfigScreen extends Screen {
     private EditBox textColorEditBox;
 
     
+    public MComponent selectedComponent = MComponentsManager.getLastSelectedOrFirst();
+
     // Component creation/destruction
     private Button newComponentButton = Button.builder(NEW_COMPONENT, (btn) -> {
         selectedComponent = MComponentsManager.createComponent();
         setConfigValues();
-    }).width(120).build();
+        minecraft.setScreen(new ConfigScreen());
+    }).width(200).build();
     private Button deleteComponentButton = Button.builder(DELETE_COMPONENT, (btn) -> {
-
+        selectedComponent.delete();
+        selectedComponent = MComponentsManager.getFirstComponent();
+        setConfigValues();
     }).width(120).build();
-
-    public MComponent selectedComponent = MComponentsManager.getLastSelected();
 
     public ConfigScreen() {
         super(TITLE);
@@ -72,15 +79,27 @@ public class ConfigScreen extends Screen {
 
     @Override
     protected void init() {
+        GridLayout bottomGrid = new GridLayout();
+        bottomGrid.defaultCellSetting().paddingHorizontal(5).alignVerticallyBottom();
+        GridLayout.RowHelper bottomGrid$rowhelper = bottomGrid.createRowHelper(2);
+        bottomGrid$rowhelper.addChild(newComponentButton, 2);
+
+        bottomGrid.arrangeElements();
+        FrameLayout.alignInRectangle(bottomGrid, 0, 0, this.width, this.height, 0.5F, 1F);
+        bottomGrid.visitWidgets(this::addRenderableWidget);
+
         if (selectedComponent == null) {
-            return; //TODO: there is no component.. show it to the player
+            selectedComponent = MComponentsManager.getFirstComponent(); // Maybe we can find another
         }
 
         // Must be created here, else the game crash
         textEditBox = new MultiLineEditBox(
-            font, 0, 0, 250, 60,
+            font, 0, 0, 250, 30,
             TEXT_DEFAULT, title
         );
+        StringWidget textColorLabel = new StringWidget(120, 20, TEXT_COLOR_LABEL, font);
+        textColorLabel.alignRight();
+
         textColorEditBox = new EditBox(font, 0, 0, 120, 20, title);
 
         setConfigValues();
@@ -100,35 +119,33 @@ public class ConfigScreen extends Screen {
         StringWidget modNameWidget = new StringWidget(Component.translatable("cpsdisplay.title", References.MOD_NAME, modVersion), font);
 
         gridlayout$rowhelper.addChild(modNameWidget, 2);
-        gridlayout$rowhelper.addChild(enableModCycle, 2);
-        gridlayout$rowhelper.addChild(SpacerElement.height(2), 2);
-        gridlayout$rowhelper.addChild(shadowCycle);
-        gridlayout$rowhelper.addChild(rainbowCycle);
-        gridlayout$rowhelper.addChild(textColorEditBox, 2);
+        if (selectedComponent != null) {
+            gridlayout$rowhelper.addChild(enableModCycle);
+            gridlayout$rowhelper.addChild(deleteComponentButton);
+            gridlayout$rowhelper.addChild(SpacerElement.height(2), 2);
+            gridlayout$rowhelper.addChild(shadowCycle);
+            gridlayout$rowhelper.addChild(rainbowCycle);
 
-        gridlayout$rowhelper.addChild(textEditBox, 2);
-        gridlayout$rowhelper.addChild(sliderButton, 2);
+            gridlayout$rowhelper.addChild(textColorLabel);
+            gridlayout$rowhelper.addChild(textColorEditBox);
 
-        gridlayout$rowhelper.addChild(SpacerElement.height(2), 2);
+            gridlayout$rowhelper.addChild(textEditBox, 2);
+            gridlayout$rowhelper.addChild(sliderButton, 2);
+
+            gridlayout$rowhelper.addChild(SpacerElement.height(2), 2);
+        }
+
         gridlayout$rowhelper.addChild(doneButton, 2);
 
         gridlayout.arrangeElements();
         FrameLayout.alignInRectangle(gridlayout, 0, 12, this.width, this.height, 0.5F, 0.0F);
         gridlayout.visitWidgets(this::addRenderableWidget);
-
-
-        GridLayout bottomGrid = new GridLayout();
-        bottomGrid.defaultCellSetting().paddingHorizontal(5).alignVerticallyBottom();
-        GridLayout.RowHelper bottomGrid$rowhelper = bottomGrid.createRowHelper(2);
-        bottomGrid$rowhelper.addChild(newComponentButton);
-        bottomGrid$rowhelper.addChild(deleteComponentButton);
-
-        bottomGrid.arrangeElements();
-        FrameLayout.alignInRectangle(bottomGrid, 0, 0, this.width, this.height, 0.5F, 1F);
-        bottomGrid.visitWidgets(this::addRenderableWidget);
     }
 
     public void setConfigValues() {
+        if (selectedComponent == null) return;
+        
+        GlobalConfig.setLastSelectedID(selectedComponent.id);
         textEditBox.setValue(selectedComponent.config.text);
 
         sliderButton.setValue(selectedComponent.config.scale);
@@ -142,7 +159,7 @@ public class ConfigScreen extends Screen {
 
     @Override
     public void onClose() {
-        selectedComponent.config.save();
+        if (selectedComponent != null) selectedComponent.config.save();
         super.onClose();
     }
 
@@ -150,11 +167,14 @@ public class ConfigScreen extends Screen {
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
         for (MComponent component : MComponentsManager.components.values()) {
             if (component.isOver(mouseX, mouseY) && mouseButton == 0) {
-                // Then save previously selected component
-                selectedComponent.config.save();
+                if (selectedComponent != null) {
+                    // Then save previously selected component
+                    selectedComponent.config.save();
+                }
+                System.out.println("CLICK");
+                System.out.println(component.id);
                 // And change the selected component
                 selectedComponent = component;
-                GlobalConfig.setLastSelectedID(component.id);
                 setConfigValues();
 
                 // And display the moving screen
@@ -174,57 +194,52 @@ public class ConfigScreen extends Screen {
     
     @Override
     public void render(GuiGraphics guiGraphics, int p_281550_, int p_282878_, float p_282465_) {
-        selectedComponent.config.text = textEditBox.getValue();
-        selectedComponent.config.shadow = shadowCycle.getValue();
-        selectedComponent.config.showText = enableModCycle.getValue();
-        selectedComponent.config.rainbow = rainbowCycle.getValue();
+        if (selectedComponent != null) {
+            selectedComponent.config.text = textEditBox.getValue();
+            selectedComponent.config.shadow = shadowCycle.getValue();
+            selectedComponent.config.showText = enableModCycle.getValue();
+            selectedComponent.config.rainbow = rainbowCycle.getValue();
 
-        selectedComponent.config.scale = (float) sliderButton.getValue();
-        
-        String textColor = textColorEditBox.getValue().toLowerCase();
-        if (textColor.length() == 6) {
-            boolean correctCharacters = true;
-            for (char c : textColor.toCharArray()) {
-                correctCharacters = correctCharacters && "0123456789abcdef".indexOf(c) != -1;
+            selectedComponent.config.scale = (float) sliderButton.getValue();
+            
+            String textColor = textColorEditBox.getValue().toLowerCase();
+            if (textColor.length() == 6) {
+                boolean correctCharacters = true;
+                for (char c : textColor.toCharArray()) {
+                    correctCharacters = correctCharacters && "0123456789abcdef".indexOf(c) != -1;
+                }
+                if (correctCharacters) {
+                    // Then update config value
+                    selectedComponent.config.textColor = textColor;
+                }
+            } else if (textColor.length() == 0) {
+                textColorEditBox.setSuggestion("ffffff");
+            } else {
+                textColorEditBox.setSuggestion("");
             }
-            if (correctCharacters) {
-                // Then update config value
-                selectedComponent.config.textColor = textColor;
-            }
-        } else if (textColor.length() == 0) {
-            textColorEditBox.setSuggestion("ffffff");
-        } else {
-            textColorEditBox.setSuggestion("");
         }
 
         if ("1.20 1.20.1".contains(SharedConstants.getCurrentVersion().getId())) {
             this.renderBackground(guiGraphics);
         }
         super.render(guiGraphics, p_281550_, p_282878_, p_282465_);
-        
-        
-
-
 
         // Display all components
+        // Must be after render background else it will be overdrawn
         for (MComponent component : MComponentsManager.components.values()) {
             component.render(guiGraphics);
             // Draw gray border if you can select the component
             // This is usefull to see were are disabled components
-            if (component.id != selectedComponent.id) {
-                int[] boundaries = component.getIBoundaries();
-                guiGraphics.hLine(boundaries[0], boundaries[2], boundaries[1], SELECTABLE_COLOR);
-                guiGraphics.hLine(boundaries[0], boundaries[2], boundaries[3], SELECTABLE_COLOR);
-                guiGraphics.vLine(boundaries[0], boundaries[1], boundaries[3], SELECTABLE_COLOR);
-                guiGraphics.vLine(boundaries[2], boundaries[1], boundaries[3], SELECTABLE_COLOR);
+            int color = SELECTABLE_COLOR;
+            if (component.id == selectedComponent.id) {
+                color = SELECTED_COLOR;
             }
-        }
 
-        // Draw yellow border for the selected component
-        int[] boundaries = selectedComponent.getIBoundaries();
-        guiGraphics.hLine(boundaries[0], boundaries[2], boundaries[1], SELECTED_COLOR);
-        guiGraphics.hLine(boundaries[0], boundaries[2], boundaries[3], SELECTED_COLOR);
-        guiGraphics.vLine(boundaries[0], boundaries[1], boundaries[3], SELECTED_COLOR);
-        guiGraphics.vLine(boundaries[2], boundaries[1], boundaries[3], SELECTED_COLOR);
+            int[] boundaries = component.getIBoundaries();
+            guiGraphics.hLine(boundaries[0], boundaries[2], boundaries[1], color);
+            guiGraphics.hLine(boundaries[0], boundaries[2], boundaries[3], color);
+            guiGraphics.vLine(boundaries[0], boundaries[1], boundaries[3], color);
+            guiGraphics.vLine(boundaries[2], boundaries[1], boundaries[3], color);
+        }
     }
 }
