@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 import fr.dams4k.cpsdisplay.References;
 import fr.dams4k.cpsdisplay.config.GlobalConfig;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.loading.FMLPaths;
 
 @Mod.EventBusSubscriber(modid = References.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MComponentsManager {
@@ -58,6 +59,11 @@ public class MComponentsManager {
 		if (!path.toFile().exists()) {
 			try {
 				Files.createDirectories(path);
+				Path oldConfigFile = FMLPaths.CONFIGDIR.get().resolve("cpsdisplay.toml");
+				if (oldConfigFile.toFile().exists()) {
+					oldConfigFile.toFile().renameTo(path.resolve("0.toml").toFile());
+				}
+				
 				// First launch of the mod, we create the first component
 				//TODO: when we call createComponent and components folder isn't created, 2 components will be created
 				MComponent firstComponent = new MComponent(path.resolve("0.toml").toString());
