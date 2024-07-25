@@ -22,7 +22,6 @@ public class MComponentsDisplayer {
 
     protected static final Minecraft mc = Minecraft.getInstance();
 
-    // private final MComponent component;
     // Minecraft keys
     private static final KeyMapping KEY_ATTACK = mc.options.keyAttack;
     private static final KeyMapping KEY_USE = mc.options.keyUse;
