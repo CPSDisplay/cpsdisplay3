@@ -71,6 +71,7 @@ public class ConfigScreen extends Screen {
         selectedComponent.delete();
         selectedComponent = MComponentsManager.getFirstComponent();
         setConfigValues();
+        minecraft.setScreen(new ConfigScreen());
     }).width(120).build();
 
     public ConfigScreen() {
