@@ -188,8 +188,6 @@ public class ConfigScreen extends Screen {
                 return true;
             }
         }
-        
-        //TODO: when component clicked, change selected component and save previous component
         return super.mouseClicked(mouseX, mouseY, mouseButton);
     }
     
