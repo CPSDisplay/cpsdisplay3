@@ -12,6 +12,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 
 import fr.dams4k.cpsdisplay.References;
 import fr.dams4k.cpsdisplay.References.ReleaseType;
+import fr.dams4k.cpsdisplay.commands.ConfigCommand;
 import fr.dams4k.cpsdisplay.VersionChecker;
 import fr.dams4k.cpsdisplay.gui.ConfigScreen;
 import fr.dams4k.cpsdisplay.gui.components.MComponentsDisplayer;
@@ -28,6 +29,7 @@ import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -45,6 +47,11 @@ public class ModEvents {
     @Mod.EventBusSubscriber(modid = References.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
     public static class ForgeEvents {
         public static boolean used = false;
+
+        @SubscribeEvent
+        public static void RegisterClientCommandsEvent(RegisterClientCommandsEvent event) {
+            ConfigCommand.register(event.getDispatcher());
+        }
 
         @SubscribeEvent
         public static void onInput(InputEvent.Key event) {
