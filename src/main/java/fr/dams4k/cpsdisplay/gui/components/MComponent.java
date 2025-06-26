@@ -1,6 +1,7 @@
 package fr.dams4k.cpsdisplay.gui.components;
 
 import java.awt.Color;
+import java.io.File;
 
 import javax.annotation.Nonnull;
 
@@ -18,12 +19,8 @@ public class MComponent {
     public MComponent(String path) {
         this.config = new MComponentConfig(path);
         
-
-        // i know regex is better but i can't get it working on java.. i don't understand why and i don't want to lose more time
-        String[] s = path.split("/");
-        String filename = s[s.length-1];
-        System.out.println(filename);
-        String[] sf = filename.split("\\.");
+        File file = new File(path);
+        String[] sf = file.getName().split("\\.");
         String sID = sf[0];
         id = Integer.parseInt(sID);
     }
