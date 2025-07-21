@@ -83,6 +83,7 @@ public class MComponentConfig {
         return this.text
             .replace("{0}", MComponentsDisplayer.getAttackCPS().toString())
             .replace("{1}", MComponentsDisplayer.getUseCPS().toString())
+            .replace("{fps}", MComponentsDisplayer.getFPS().toString())
             .replace("&", "§");
     }
 

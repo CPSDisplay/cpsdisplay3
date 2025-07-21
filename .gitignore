@@ -1,5 +1,7 @@
 #minecraft
-run
+run/*
+build/*
+run-data/*
 
 # eclipse
 bin

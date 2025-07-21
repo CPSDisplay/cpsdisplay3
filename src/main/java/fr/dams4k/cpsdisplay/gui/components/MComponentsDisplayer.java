@@ -79,6 +79,10 @@ public class MComponentsDisplayer {
         return useClicks.size();
     }
 
+    public static Integer getFPS() {
+        return mc.getFps();
+    }
+
     public static @Nonnull String longuestLine(@Nonnull String text) {
         int maxLength = 0;
         int idx = 0;
